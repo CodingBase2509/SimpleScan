@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "S8noH8/4nvc=",
+  "success": true,
+  "projectFilePath": "/Users/fabian/Developer/SimpleScan/SimpleScan/SimpleScan.csproj",
+  "expectedPackageFiles": [
+    "/Users/fabian/.nuget/packages/microsoft.aspnetcore.app.internal.assets/10.0.9/microsoft.aspnetcore.app.internal.assets.10.0.9.nupkg.sha512"
+  ],
+  "logs": []
+}
