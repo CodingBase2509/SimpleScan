@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SimpleScan")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2168b33b10056f32071096fb905c04d811327610")]
 [assembly: System.Reflection.AssemblyProductAttribute("SimpleScan")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SimpleScan")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

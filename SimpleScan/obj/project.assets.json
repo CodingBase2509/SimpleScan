@@ -11,6 +11,43 @@
         "buildMultiTargeting": {
           "buildMultiTargeting/Microsoft.AspNetCore.App.Internal.Assets.targets": {}
         }
+      },
+      "SimpleScan.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "SimpleScan.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/SimpleScan.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/SimpleScan.Application.dll": {}
+        }
+      },
+      "SimpleScan.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/SimpleScan.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/SimpleScan.Domain.dll": {}
+        }
+      },
+      "SimpleScan.Infrastructure/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "SimpleScan.Application": "1.0.0",
+          "SimpleScan.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/SimpleScan.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/SimpleScan.Infrastructure.dll": {}
+        }
       }
     }
   },
@@ -37,11 +74,28 @@
         "microsoft.aspnetcore.app.internal.assets.10.0.9.nupkg.sha512",
         "microsoft.aspnetcore.app.internal.assets.nuspec"
       ]
+    },
+    "SimpleScan.Application/1.0.0": {
+      "type": "project",
+      "path": "../SimpleScan.Application/SimpleScan.Application.csproj",
+      "msbuildProject": "../SimpleScan.Application/SimpleScan.Application.csproj"
+    },
+    "SimpleScan.Domain/1.0.0": {
+      "type": "project",
+      "path": "../SimpleScan.Domain/SimpleScan.Domain.csproj",
+      "msbuildProject": "../SimpleScan.Domain/SimpleScan.Domain.csproj"
+    },
+    "SimpleScan.Infrastructure/1.0.0": {
+      "type": "project",
+      "path": "../SimpleScan.Infrastructure/SimpleScan.Infrastructure.csproj",
+      "msbuildProject": "../SimpleScan.Infrastructure/SimpleScan.Infrastructure.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
-      "Microsoft.AspNetCore.App.Internal.Assets >= 10.0.9"
+      "Microsoft.AspNetCore.App.Internal.Assets >= 10.0.9",
+      "SimpleScan.Application >= 1.0.0",
+      "SimpleScan.Infrastructure >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -56,6 +110,7 @@
       "packagesPath": "/Users/fabian/.nuget/packages/",
       "outputPath": "/Users/fabian/Developer/SimpleScan/SimpleScan/obj/",
       "projectStyle": "PackageReference",
+      "centralPackageVersionsManagementEnabled": true,
       "configFilePaths": [
         "/Users/fabian/.nuget/NuGet/NuGet.Config"
       ],
@@ -69,7 +124,14 @@
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "/Users/fabian/Developer/SimpleScan/SimpleScan.Application/SimpleScan.Application.csproj": {
+              "projectPath": "/Users/fabian/Developer/SimpleScan/SimpleScan.Application/SimpleScan.Application.csproj"
+            },
+            "/Users/fabian/Developer/SimpleScan/SimpleScan.Infrastructure/SimpleScan.Infrastructure.csproj": {
+              "projectPath": "/Users/fabian/Developer/SimpleScan/SimpleScan.Infrastructure/SimpleScan.Infrastructure.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -94,6 +156,12 @@
             "version": "[10.0.9, )",
             "autoReferenced": true
           }
+        },
+        "centralPackageVersions": {
+          "MudBlazor": "9.5.0",
+          "NAPS2.Sdk": "1.2.1",
+          "QuestPDF": "2026.6.1",
+          "SixLabors.ImageSharp": "4.0.0"
         },
         "imports": [
           "net461",

@@ -1,0 +1,11 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="SimpleScan.Application/SimpleScan.Application.csproj" />
+  <Project Path="SimpleScan.Domain/SimpleScan.Domain.csproj" />
+  <Project Path="SimpleScan.Infrastructure/SimpleScan.Infrastructure.csproj" />
+  <Project Path="SimpleScan/SimpleScan.csproj" />
+</Solution>

@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="MudBlazor" Version="9.5.0" />
+    <PackageVersion Include="NAPS2.Sdk" Version="1.2.1" />
+    <PackageVersion Include="QuestPDF" Version="2026.6.1" />
+    <PackageVersion Include="SixLabors.ImageSharp" Version="4.0.0" />
+  </ItemGroup>
+</Project>
