@@ -2,9 +2,9 @@ using SimpleScan.Domain.Common;
 
 namespace SimpleScan.Domain.Downloads;
 
-public sealed class DownloadToken
+public sealed class DownloadTicket
 {
-    public DownloadToken(
+    public DownloadTicket(
         string token,
         Guid documentId,
         string filePath,
@@ -17,12 +17,12 @@ public sealed class DownloadToken
             throw new ArgumentException("Document id cannot be empty.", nameof(documentId));
         }
 
-        Token = Guard.NotWhiteSpace(token);
+        Token = Guard.NotWhiteSpace(token, nameof(token));
         DocumentId = documentId;
-        FilePath = Guard.NotWhiteSpace(filePath);
-        FileName = Guard.NotWhiteSpace(fileName);
-        CreatedAtUtc = Guard.Utc(createdAtUtc);
-        ExpiresAtUtc = Guard.Utc(expiresAtUtc);
+        FilePath = Guard.NotWhiteSpace(filePath, nameof(filePath));
+        FileName = Guard.NotWhiteSpace(fileName, nameof(fileName));
+        CreatedAtUtc = Guard.Utc(createdAtUtc, nameof(createdAtUtc));
+        ExpiresAtUtc = Guard.Utc(expiresAtUtc, nameof(expiresAtUtc));
 
         if (ExpiresAtUtc <= CreatedAtUtc)
         {

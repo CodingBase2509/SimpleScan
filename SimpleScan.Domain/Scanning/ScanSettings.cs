@@ -1,6 +1,6 @@
 using SimpleScan.Domain.Common;
 
-namespace SimpleScan.Domain.Scanners;
+namespace SimpleScan.Domain.Scanning;
 
 public sealed class ScanSettings
 {

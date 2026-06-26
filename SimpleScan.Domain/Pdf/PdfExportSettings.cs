@@ -1,6 +1,6 @@
 using SimpleScan.Domain.Common;
 
-namespace SimpleScan.Domain.PdfExport;
+namespace SimpleScan.Domain.Pdf;
 
 public sealed class PdfExportSettings
 {

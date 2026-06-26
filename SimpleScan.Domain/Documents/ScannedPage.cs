@@ -1,17 +1,17 @@
 using SimpleScan.Domain.Common;
 using SimpleScan.Domain.PageEditing;
 
-namespace SimpleScan.Domain.ScanDocuments;
+namespace SimpleScan.Domain.Documents;
 
 public sealed class ScannedPage
 {
     public ScannedPage(
         Guid id,
         int pageNumber,
-        string originalFilePath,
+        string originalPath,
         DateTime scannedAtUtc,
-        string? renderedFilePath = null,
-        string? thumbnailFilePath = null,
+        string? previewPath = null,
+        string? thumbnailPath = null,
         PageEditSettings? editSettings = null)
     {
         if (id == Guid.Empty)
@@ -21,9 +21,9 @@ public sealed class ScannedPage
 
         Id = id;
         PageNumber = Guard.Positive(pageNumber, nameof(pageNumber));
-        OriginalFilePath = Guard.NotWhiteSpace(originalFilePath, nameof(originalFilePath));
-        RenderedFilePath = string.IsNullOrWhiteSpace(renderedFilePath) ? null : renderedFilePath.Trim();
-        ThumbnailFilePath = string.IsNullOrWhiteSpace(thumbnailFilePath) ? null : thumbnailFilePath.Trim();
+        OriginalPath = Guard.NotWhiteSpace(originalPath, nameof(originalPath));
+        PreviewPath = string.IsNullOrWhiteSpace(previewPath) ? null : previewPath.Trim();
+        ThumbnailPath = string.IsNullOrWhiteSpace(thumbnailPath) ? null : thumbnailPath.Trim();
         EditSettings = editSettings ?? PageEditSettings.None;
         ScannedAtUtc = Guard.Utc(scannedAtUtc, nameof(scannedAtUtc));
     }
@@ -32,27 +32,27 @@ public sealed class ScannedPage
 
     public int PageNumber { get; private set; }
 
-    public string OriginalFilePath { get; }
+    public string OriginalPath { get; }
 
-    public string? RenderedFilePath { get; private set; }
+    public string? PreviewPath { get; private set; }
 
-    public string? ThumbnailFilePath { get; private set; }
+    public string? ThumbnailPath { get; private set; }
 
     public PageEditSettings EditSettings { get; private set; }
 
     public DateTime ScannedAtUtc { get; }
 
-    public static ScannedPage CreateNew(int pageNumber, string originalFilePath, DateTime scannedAtUtc) =>
-        new(Guid.NewGuid(), pageNumber, originalFilePath, scannedAtUtc);
+    public static ScannedPage CreateNew(int pageNumber, string originalPath, DateTime scannedAtUtc) =>
+        new(Guid.NewGuid(), pageNumber, originalPath, scannedAtUtc);
 
     internal void SetPageNumber(int pageNumber) =>
         PageNumber = Guard.Positive(pageNumber, nameof(pageNumber));
 
-    public void SetRenderedFilePath(string renderedFilePath) =>
-        RenderedFilePath = Guard.NotWhiteSpace(renderedFilePath, nameof(renderedFilePath));
+    public void SetPreviewPath(string previewPath) =>
+        PreviewPath = Guard.NotWhiteSpace(previewPath, nameof(previewPath));
 
-    public void SetThumbnailFilePath(string thumbnailFilePath) =>
-        ThumbnailFilePath = Guard.NotWhiteSpace(thumbnailFilePath, nameof(thumbnailFilePath));
+    public void SetThumbnailPath(string thumbnailPath) =>
+        ThumbnailPath = Guard.NotWhiteSpace(thumbnailPath, nameof(thumbnailPath));
 
     public void UpdateEditSettings(PageEditSettings editSettings) =>
         EditSettings = editSettings ?? throw new ArgumentNullException(nameof(editSettings));

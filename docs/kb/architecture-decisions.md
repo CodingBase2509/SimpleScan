@@ -151,19 +151,47 @@ Die Domain-Schicht enthaelt nicht nur anemische DTOs, sondern kontrolliert einfa
 
 Aktuelle Domain-Bausteine:
 
-- Scanner: `ScannerDevice`, `ScannerCapabilities`, `ScannerStatus`, `ScanSettings`
-- Dokumente: `ScanDocument`, `ScannedPage`, `ScanDocumentStatus`
+- Documents: `ScanDocument`, `ScannedPage`, `ScanDocumentStatus`
+- Scanning: `ScanSettings`, `ScanColorMode`
+- Scanners: `ScannerDevice`, `ScannerCapabilities`, `ScannerStatus`
 - Seitenbearbeitung: `PageEditSettings`, `CropArea`, `ResizeSettings`
 - Export: `PdfExportSettings`, `PdfCompressionLevel`
-- Downloads: `DownloadToken`
+- Downloads: `DownloadTicket`
 
 Konsequenzen:
 
 - Seitenreihenfolge und Page-Nummern werden im `ScanDocument` konsistent gehalten.
 - Geschlossene Dokumente koennen nicht weiter bearbeitet oder exportiert werden.
 - Export ohne Seiten ist nicht erlaubt.
-- Ablauffristen von DownloadTokens sind Domain-Logik.
+- Ablauffristen von DownloadTickets sind Domain-Logik.
 - Infrastructure darf Dateipfade erzeugen, aber Domain-Typen validieren, dass keine leeren Pfade gespeichert werden.
+
+## ADR-012: Application-Struktur nach Scan-App-Arbeitsbereichen
+
+Status: entschieden
+
+Das Application-Projekt wird nach den fachlichen Arbeitsbereichen der Scan-App strukturiert. Ziel ist eine pragmatische Services-Schicht mit klar benannten Ports statt generischer Handler- oder Repository-Abstraktionen.
+
+Aktuelle Bereiche:
+
+- `Downloads`
+- `Events`
+- `FileStorage`
+- `PageEditing`
+- `Processing/Images`
+- `Processing/Pdf`
+- `Scanning`
+- `Scanners`
+- `Stores`
+
+Konsequenzen:
+
+- `Scanning` enthaelt spaeter die Scan-Workflows.
+- `Scanners` enthaelt den Port fuer Hardware-Interaktion.
+- `FileStorage` enthaelt Datei-Ports und einfache Datei-Modelle.
+- `Processing` trennt Bildverarbeitung von PDF-Erzeugung.
+- `Stores` haelt Metadaten und aktuellen App-Zustand, aber keine Dateien.
+- `Downloads` arbeitet mit einfachen Download-Tickets, die auf exportierte Dateien im FileStorage zeigen.
 
 ## Verwandte Knoten
 

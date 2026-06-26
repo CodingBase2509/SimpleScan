@@ -1,7 +1,7 @@
 using SimpleScan.Domain.Common;
-using SimpleScan.Domain.Scanners;
+using SimpleScan.Domain.Scanning;
 
-namespace SimpleScan.Domain.ScanDocuments;
+namespace SimpleScan.Domain.Documents;
 
 public sealed class ScanDocument
 {
@@ -57,22 +57,22 @@ public sealed class ScanDocument
 
     public void UpdateSettings(ScanSettings settings)
     {
-        EnsureNotClosed();
+        EnsureOpen();
         Settings = settings ?? throw new ArgumentNullException(nameof(settings));
     }
 
-    public ScannedPage AddPage(string originalFilePath, DateTime scannedAtUtc)
+    public ScannedPage AddPage(string originalPath, DateTime scannedAtUtc)
     {
-        EnsureNotClosed();
+        EnsureOpen();
 
-        var page = ScannedPage.CreateNew(_pages.Count + 1, originalFilePath, scannedAtUtc);
+        var page = ScannedPage.CreateNew(_pages.Count + 1, originalPath, scannedAtUtc);
         _pages.Add(page);
         return page;
     }
 
     public void AddPage(ScannedPage page)
     {
-        EnsureNotClosed();
+        EnsureOpen();
         ArgumentNullException.ThrowIfNull(page);
 
         if (_pages.Any(existing => existing.Id == page.Id))
@@ -86,7 +86,7 @@ public sealed class ScanDocument
 
     public void RemovePage(Guid pageId)
     {
-        EnsureNotClosed();
+        EnsureOpen();
 
         var removedCount = _pages.RemoveAll(page => page.Id == pageId);
         if (removedCount == 0)
@@ -99,7 +99,7 @@ public sealed class ScanDocument
 
     public void MovePage(Guid pageId, int newPageNumber)
     {
-        EnsureNotClosed();
+        EnsureOpen();
         Guard.Positive(newPageNumber, nameof(newPageNumber));
 
         var page = _pages.SingleOrDefault(candidate => candidate.Id == pageId)
@@ -117,25 +117,19 @@ public sealed class ScanDocument
 
     public void MarkScanning()
     {
-        EnsureNotClosed();
+        EnsureOpen();
         Status = ScanDocumentStatus.Scanning;
     }
 
-    public void MarkDraft()
+    public void MarkReady()
     {
-        EnsureNotClosed();
+        EnsureOpen();
         Status = ScanDocumentStatus.Draft;
-    }
-
-    public void MarkEditing()
-    {
-        EnsureNotClosed();
-        Status = ScanDocumentStatus.Editing;
     }
 
     public void MarkExporting()
     {
-        EnsureNotClosed();
+        EnsureOpen();
 
         if (_pages.Count == 0)
         {
@@ -147,7 +141,7 @@ public sealed class ScanDocument
 
     public void MarkExported()
     {
-        EnsureNotClosed();
+        EnsureOpen();
         Status = ScanDocumentStatus.Exported;
     }
 
@@ -165,7 +159,7 @@ public sealed class ScanDocument
         Status = ScanDocumentStatus.Closed;
     }
 
-    private void EnsureNotClosed()
+    private void EnsureOpen()
     {
         if (Status == ScanDocumentStatus.Closed)
         {

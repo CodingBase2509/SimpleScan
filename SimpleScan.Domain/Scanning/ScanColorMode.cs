@@ -1,4 +1,4 @@
-namespace SimpleScan.Domain.Scanners;
+namespace SimpleScan.Domain.Scanning;
 
 public enum ScanColorMode
 {

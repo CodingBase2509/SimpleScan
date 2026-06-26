@@ -1,4 +1,4 @@
-namespace SimpleScan.Domain.PdfExport;
+namespace SimpleScan.Domain.Pdf;
 
 public enum PdfCompressionLevel
 {

@@ -1,3 +1,5 @@
+using SimpleScan.Domain.Scanning;
+
 namespace SimpleScan.Domain.Scanners;
 
 public sealed class ScannerCapabilities
