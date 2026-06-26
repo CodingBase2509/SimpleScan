@@ -143,6 +143,28 @@ Konsequenzen:
 - Die alte `SimpleScan.sln` wird nicht weiter gepflegt.
 - Solution-Kommandos sollen gegen `SimpleScan.slnx` ausgefuehrt werden.
 
+## ADR-011: Domain-Modell mit leichten Invarianten
+
+Status: entschieden
+
+Die Domain-Schicht enthaelt nicht nur anemische DTOs, sondern kontrolliert einfache fachliche Invarianten direkt in den Domain-Typen.
+
+Aktuelle Domain-Bausteine:
+
+- Scanner: `ScannerDevice`, `ScannerCapabilities`, `ScannerStatus`, `ScanSettings`
+- Dokumente: `ScanDocument`, `ScannedPage`, `ScanDocumentStatus`
+- Seitenbearbeitung: `PageEditSettings`, `CropArea`, `ResizeSettings`
+- Export: `PdfExportSettings`, `PdfCompressionLevel`
+- Downloads: `DownloadToken`
+
+Konsequenzen:
+
+- Seitenreihenfolge und Page-Nummern werden im `ScanDocument` konsistent gehalten.
+- Geschlossene Dokumente koennen nicht weiter bearbeitet oder exportiert werden.
+- Export ohne Seiten ist nicht erlaubt.
+- Ablauffristen von DownloadTokens sind Domain-Logik.
+- Infrastructure darf Dateipfade erzeugen, aber Domain-Typen validieren, dass keine leeren Pfade gespeichert werden.
+
 ## Verwandte Knoten
 
 - [Projektbrief](project-brief.md)
