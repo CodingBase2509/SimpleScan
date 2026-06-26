@@ -41,6 +41,8 @@ Auf Nutzerwunsch wird aktuell noch nichts an der App-Funktionalitaet umgesetzt. 
 - Template-Beispielcode wird entfernt oder auf minimale technische Platzhalter reduziert, bevor fachliche Funktionalitaet entsteht.
 - Die App soll nach Bereinigungen weiterhin kompilieren.
 - NuGet-Versionen werden zentral in `Directory.Packages.props` gepflegt.
+- Gemeinsame .NET-Build-Defaults werden zentral in `Directory.Build.props` gepflegt.
+- Haeufig verwendete projektinterne Namespaces duerfen pro Projekt in `GlobalUsings.cs` gebuendelt werden.
 - Neue Codebereiche sollen die Projektgrenzen `Domain`, `Application`, `Infrastructure` und `Web` respektieren.
 - Die massgebliche Solution-Datei ist `SimpleScan.slnx`.
 

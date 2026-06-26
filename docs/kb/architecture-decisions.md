@@ -193,6 +193,27 @@ Konsequenzen:
 - `Stores` haelt Metadaten und aktuellen App-Zustand, aber keine Dateien.
 - `Downloads` arbeitet mit einfachen Download-Tickets, die auf exportierte Dateien im FileStorage zeigen.
 
+## ADR-013: Gemeinsame Build-Defaults und Global Usings
+
+Status: entschieden
+
+Gemeinsame .NET-Projekteinstellungen werden ueber `Directory.Build.props` auf Repository-Ebene gepflegt.
+
+Aktuelle gemeinsame Defaults:
+
+- `TargetFramework`: `net10.0`
+- `ImplicitUsings`: `enable`
+- `Nullable`: `enable`
+
+Zusaetzlich enthalten `SimpleScan.Domain` und `SimpleScan.Application` je eine `GlobalUsings.cs` fuer haeufig verwendete projektinterne Namespaces.
+
+Konsequenzen:
+
+- Neue Projekte erben die gemeinsamen Compiler-Defaults automatisch.
+- Projektdateien enthalten weniger wiederholte Konfiguration.
+- SDK-Implicit-Usings werden weiterhin vom Build in `obj/.../*.GlobalUsings.g.cs` erzeugt.
+- Wenn `obj/` geloescht wurde, kann die IDE erst nach Restore/Build alle generierten implicit usings sehen.
+
 ## Verwandte Knoten
 
 - [Projektbrief](project-brief.md)
