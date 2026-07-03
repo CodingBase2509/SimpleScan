@@ -1,1 +1,21 @@
+.device-selection-panel {
+    display: grid;
+    gap: 1rem;
+}
 
+::deep .mud-paper {
+    border: 0;
+}
+
+.device-selection-panel__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+@media (max-width: 640px) {
+    .device-selection-panel__header {
+        display: grid;
+    }
+}

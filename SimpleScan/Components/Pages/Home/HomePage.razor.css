@@ -1,1 +1,24 @@
+.home-page {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 1rem;
+    min-height: 100vh;
+    padding: 1.25rem 1.5rem;
+}
 
+.home-page__content {
+    display: grid;
+    grid-template-columns: minmax(18rem, 1fr) auto minmax(0, 2fr);
+    gap: 1.5rem;
+    align-items: start;
+}
+
+@media (max-width: 900px) {
+    .home-page {
+        padding: 1rem;
+    }
+
+    .home-page__content {
+        grid-template-columns: 1fr;
+    }
+}

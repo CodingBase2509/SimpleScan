@@ -1,1 +1,27 @@
+.home-action-bar {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: center;
+    align-content: start;
+    min-height: 24rem;
+    padding-top: 3rem;
+}
 
+.home-action-bar__header {
+    display: grid;
+    gap: 0.25rem;
+    width: min(100%, 34rem);
+}
+
+.home-action-bar__actions {
+    display: grid;
+    gap: 1rem;
+    width: min(100%, 34rem);
+}
+
+::deep .home-action-bar__button {
+    min-height: 4rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: 0;
+}

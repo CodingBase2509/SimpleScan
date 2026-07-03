@@ -3,10 +3,11 @@
     <PropertyGroup>
         <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <IntermediateOutputPath>obj/$(Configuration)/</IntermediateOutputPath>
     </PropertyGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
+      <Content Include="../.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
     </ItemGroup>

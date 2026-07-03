@@ -1,1 +1,27 @@
 @page "/"
+
+<main class="home-page">
+    <PageHeader Title="SimpleScan"
+                TitleTypo="Typo.h5">
+        <Actions>
+            <IconButton Icon="@Icons.Material.Filled.Refresh"
+                        Tooltip="Refresh devices"
+                        AriaLabel="Refresh devices"/>
+            <IconButton Icon="@Icons.Material.Filled.Settings"
+                        Tooltip="Settings"
+                        AriaLabel="Settings"/>
+        </Actions>
+    </PageHeader>
+
+    <section class="home-page__content" id="1">
+        <DeviceSelectionPanel/>
+        
+        <MudDivider 
+            DividerType="DividerType.FullWidth"
+            Vertical="true"
+            Style="width: 0.2rem;"
+        />
+        
+        <HomeActionBar />
+    </section>
+</main>
