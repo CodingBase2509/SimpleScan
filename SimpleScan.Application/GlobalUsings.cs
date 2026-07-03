@@ -5,6 +5,7 @@ global using SimpleScan.Application.Processing.Images;
 global using SimpleScan.Application.Processing.Pdf;
 global using SimpleScan.Application.Scanners;
 global using SimpleScan.Application.Stores;
+global using SimpleScan.Domain.Common;
 global using SimpleScan.Domain.Documents;
 global using SimpleScan.Domain.Downloads;
 global using SimpleScan.Domain.Pdf;

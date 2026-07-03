@@ -193,6 +193,12 @@ Konsequenzen:
 - `Stores` haelt Metadaten und aktuellen App-Zustand, aber keine Dateien.
 - `Downloads` arbeitet mit einfachen Download-Tickets, die auf exportierte Dateien im FileStorage zeigen.
 
+Aktuelle Application-Services:
+
+- `Scanning/ScanDocumentService`: Dokument erstellen, laden, schliessen und loeschen.
+- `Scanning/ScanPageService`: Seite scannen, Original speichern, Seite ans Dokument haengen, Seite loeschen und Seitenreihenfolge aendern.
+- `Scanners/ScannerService`: Scanner entdecken, bekannte Scanner speichern, Capabilities cachen und Status lesen.
+
 ## ADR-013: Gemeinsame Build-Defaults und Global Usings
 
 Status: entschieden
