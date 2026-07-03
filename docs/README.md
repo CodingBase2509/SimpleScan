@@ -4,13 +4,13 @@ Diese Dokumentation ist die persistente Knowledge-Base fuer das Projekt. Sie ist
 
 ## Einstieg
 
-- [Projektbrief](kb/project-brief.md)
-- [Knowledge Graph](kb/knowledge-graph.md)
-- [Architekturentscheidungen](kb/architecture-decisions.md)
-- [MVP-Roadmap](kb/mvp-roadmap.md)
-- [Scanner-Support-Strategie](kb/scanner-support-strategy.md)
-- [Arbeitsweise](kb/working-agreements.md)
-- [Offene Fragen und Risiken](kb/open-questions-and-risks.md)
+- [Projektbrief](./project-brief.md)
+- [Knowledge Graph](./knowledge-graph.md)
+- [Architekturentscheidungen](./architecture-decisions.md)
+- [MVP-Roadmap](./mvp-roadmap.md)
+- [Scanner-Support-Strategie](./scanner-support-strategy.md)
+- [Arbeitsweise](./working-agreements.md)
+- [Offene Fragen und Risiken](./open-questions-and-risks.md)
 
 ## Pflege-Regeln
 
