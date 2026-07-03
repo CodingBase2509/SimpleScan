@@ -43,6 +43,7 @@ public sealed class FileStore : IScanFileStorage
 
     public Task<Stream> OpenReadAsync(string path, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         var safePath = EnsurePathIsInsideBasePath(path);
 
         if (!File.Exists(safePath))
@@ -63,12 +64,14 @@ public sealed class FileStore : IScanFileStorage
 
     public Task<bool> ExistsAsync(string path, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         var safePath = EnsurePathIsInsideBasePath(path);
         return Task.FromResult(File.Exists(safePath));
     }
 
     public Task DeleteFileAsync(string path, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         var safePath = EnsurePathIsInsideBasePath(path);
 
         if (!File.Exists(safePath))
@@ -82,6 +85,7 @@ public sealed class FileStore : IScanFileStorage
 
     public Task DeleteDocumentAsync(Guid documentId, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         var documentFolder = FileUtils.GetDocFolder(_basePath, documentId);
 
         if (Directory.Exists(documentFolder))
@@ -94,6 +98,8 @@ public sealed class FileStore : IScanFileStorage
 
     private Task<StoredFile> SavePageFileAsync(string folderPath, int pageNumber, BinaryFile file, CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(file);
+
         if (pageNumber <= 0)
         {
             throw new ArgumentOutOfRangeException(nameof(pageNumber), pageNumber, "Page number must be greater than zero.");
@@ -153,7 +159,8 @@ public sealed class FileStore : IScanFileStorage
 
         var fullPath = Path.GetFullPath(path);
 
-        if (!fullPath.StartsWith(_basePath, StringComparison.Ordinal))
+        if (!fullPath.Equals(_basePath, StringComparison.Ordinal)
+            && !fullPath.StartsWith(_basePath + Path.DirectorySeparatorChar, StringComparison.Ordinal))
         {
             throw new InvalidOperationException("Path is outside the configured scan file storage base path.");
         }
@@ -168,7 +175,7 @@ public sealed class FileStore : IScanFileStorage
             throw new ArgumentException("File store base path cannot be empty.", nameof(basePath));
         }
 
-        return Path.GetFullPath(basePath.Trim());
+        return Path.TrimEndingDirectorySeparator(Path.GetFullPath(basePath.Trim()));
     }
 
     private static string GetExtension(BinaryFile file)
@@ -183,6 +190,7 @@ public sealed class FileStore : IScanFileStorage
         {
             "image/jpeg" => ".jpg",
             "image/png" => ".png",
+            "image/svg+xml" => ".svg",
             "image/tiff" => ".tiff",
             "application/pdf" => ".pdf",
             _ => ".bin"

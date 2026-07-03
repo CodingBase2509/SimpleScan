@@ -1,46 +1,67 @@
 using System.Collections.Concurrent;
 using SimpleScan.Application.Stores;
-using SimpleScan.Domain.Common;
 using SimpleScan.Domain.Scanners;
 
 namespace SimpleScan.Infrastructure.Stores;
 
-public class InMemoryScannerStore : IScannerStore
+public sealed class InMemoryScannerStore : IScannerStore
 {
-    private readonly ConcurrentDictionary<string, ScannerDevice> _scanner = new();
+    private readonly ConcurrentDictionary<string, ScannerDevice> _scanners = new();
     private readonly ConcurrentDictionary<string, ScannerCapabilities>  _capabilities = new();
     
     public Task<IReadOnlyList<ScannerDevice>> ListAsync(CancellationToken cancellationToken)
     {
-        if (cancellationToken.IsCancellationRequested)
-            throw new TaskCanceledException();
+        cancellationToken.ThrowIfCancellationRequested();
 
-        return Task.FromResult<IReadOnlyList<ScannerDevice>>(_scanner.Values.ToList());
+        return Task.FromResult<IReadOnlyList<ScannerDevice>>(_scanners.Values.ToList());
     }
 
     public Task SaveAsync(ScannerDevice scanner, CancellationToken cancellationToken)
     {
-        if (_scanner.TryAdd(scanner.Id, scanner))
-            throw new DomainException($"Scanner with id {scanner.Id} can not be stored");
+        ArgumentNullException.ThrowIfNull(scanner);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        _scanners[scanner.Id] = scanner;
         return Task.CompletedTask;
     }
 
     public Task<ScannerDevice?> FindAsync(string scannerId, CancellationToken cancellationToken)
     {
-        return _scanner.TryGetValue(scannerId, out var scanner) 
+        cancellationToken.ThrowIfCancellationRequested();
+
+        if (string.IsNullOrWhiteSpace(scannerId))
+        {
+            return Task.FromResult<ScannerDevice?>(null);
+        }
+
+        return _scanners.TryGetValue(scannerId, out var scanner) 
             ? Task.FromResult(scanner) 
             : Task.FromResult<ScannerDevice?>(null);
     }
 
     public Task SaveCapabilitiesAsync(string scannerId, ScannerCapabilities capabilities, CancellationToken cancellationToken)
     {
-        if (_capabilities.TryAdd(scannerId, capabilities))
-            throw new DomainException($"Capabilities with id {scannerId} can not be stored");
+        if (string.IsNullOrWhiteSpace(scannerId))
+        {
+            throw new ArgumentException("Scanner id cannot be empty.", nameof(scannerId));
+        }
+
+        ArgumentNullException.ThrowIfNull(capabilities);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        _capabilities[scannerId.Trim()] = capabilities;
         return Task.CompletedTask;
     }
 
     public Task<ScannerCapabilities?> FindCapabilitiesAsync(string scannerId, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        if (string.IsNullOrWhiteSpace(scannerId))
+        {
+            return Task.FromResult<ScannerCapabilities?>(null);
+        }
+
         return _capabilities.TryGetValue(scannerId, out var capabilities)
             ? Task.FromResult(capabilities)
             : Task.FromResult<ScannerCapabilities?>(null);

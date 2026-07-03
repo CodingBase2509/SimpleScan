@@ -1,23 +1,31 @@
 using System.Collections.Concurrent;
 using SimpleScan.Application.Downloads;
-using SimpleScan.Domain.Common;
 using SimpleScan.Domain.Downloads;
 
 namespace SimpleScan.Infrastructure.Stores;
 
-public class InMemoryDownloadStore : IDownloadTicketStore
+public sealed class InMemoryDownloadStore : IDownloadTicketStore
 {
     private readonly ConcurrentDictionary<string, DownloadTicket> _tickets = new();
     
     public Task SaveAsync(DownloadTicket ticket, CancellationToken cancellationToken)
     {
-        if (_tickets.TryAdd(ticket.Token, ticket))
-            throw new DomainException($"Ticket with id {ticket.Token} can not be stored");
+        ArgumentNullException.ThrowIfNull(ticket);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        _tickets[ticket.Token] = ticket;
         return Task.CompletedTask;
     }
 
     public Task<DownloadTicket?> FindAsync(string token, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            return Task.FromResult<DownloadTicket?>(null);
+        }
+
         return _tickets.TryGetValue(token, out DownloadTicket? ticket)
             ? Task.FromResult(ticket)
             : Task.FromResult<DownloadTicket?>(null);
@@ -25,8 +33,12 @@ public class InMemoryDownloadStore : IDownloadTicketStore
 
     public Task DeleteAsync(string token, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         if (string.IsNullOrEmpty(token))
+        {
             return Task.CompletedTask;
+        }
         
         _tickets.TryRemove(token, out _);
         return Task.CompletedTask;
@@ -34,11 +46,18 @@ public class InMemoryDownloadStore : IDownloadTicketStore
 
     public Task DeleteExpiredAsync(DateTime utcNow, CancellationToken cancellationToken)
     {
-        var keys = _tickets.Where(kvp => kvp.Value.ExpiresAtUtc > utcNow)
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var keys = _tickets
+            .Where(kvp => kvp.Value.IsExpired(utcNow))
             .Select(kvp => kvp.Key);
         
         foreach (var key in keys)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
             _tickets.TryRemove(key, out _);
+        }
+
         return Task.CompletedTask;
     }
 }
