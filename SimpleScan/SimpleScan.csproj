@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="MudBlazor" />
       <ProjectReference Include="..\SimpleScan.Application\SimpleScan.Application.csproj" />
       <ProjectReference Include="..\SimpleScan.Infrastructure\SimpleScan.Infrastructure.csproj" />
     </ItemGroup>

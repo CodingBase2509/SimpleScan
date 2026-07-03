@@ -1,3 +1,4 @@
+using MudBlazor.Services;
 using SimpleScan.Components;
 using SimpleScan.Infrastructure.DependencyInjection;
 
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddMudServices();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
