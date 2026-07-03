@@ -1,8 +1,10 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider/>
+<MudThemeProvider Theme="@SimpleScanTheme.Theme"/>
 <MudPopoverProvider/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 
-@Body
+<ErrorBoundary>
+    @Body
+</ErrorBoundary>
