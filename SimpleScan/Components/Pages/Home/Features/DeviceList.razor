@@ -1,34 +1,39 @@
 <div class="device-list">
-    <button class="device-list__item device-list__item--selected"
-            type="button">
-        <div class="device-list__icon">
-            <MudIcon Icon="@Icons.Material.Filled.DocumentScanner" Size="Size.Large"/>
-        </div>
+    @if (IsLoading)
+    {
+        <LoadingState Message="Searching for devices..."/>
+    }
+    else if (!string.IsNullOrWhiteSpace(ErrorMessage))
+    {
+        <ErrorState Title="Device discovery failed"
+                    Message="@ErrorMessage"/>
+    }
+    else if (Devices.Count == 0)
+    {
+        <EmptyState Icon="@Icons.Material.Filled.DocumentScanner"
+                    Title="No devices found"/>
+    }
+    else
+    {
+        @foreach (var device in Devices)
+        {
+            <button class="@GetItemClass(device)"
+                    type="button"
+                    @onclick="() => SelectDeviceAsync(device.Id)">
+                <div class="device-list__icon">
+                    <MudIcon Icon="@GetDeviceIcon(device)" Size="Size.Large"/>
+                </div>
 
-        <div class="device-list__body">
-            <MudText Typo="Typo.subtitle1">Mock Scanner</MudText>
+                <div class="device-list__body">
+                    <MudText Typo="Typo.subtitle1">@device.Name</MudText>
 
-            <div class="device-list__badges">
-                <StatusBadge Label="Scan"
-                             Icon="@Icons.Material.Filled.DocumentScanner"
-                             Color="Color.Primary"/>
-            </div>
-        </div>
-    </button>
-
-    <button class="device-list__item"
-            type="button">
-        <div class="device-list__icon">
-            <MudIcon Icon="@Icons.Material.Filled.Print" Size="Size.Large"/>
-        </div>
-
-        <div class="device-list__body">
-            <MudText Typo="Typo.subtitle1">Printer support</MudText>
-
-            <div class="device-list__badges">
-                <StatusBadge Label="Print"
-                             Icon="@Icons.Material.Filled.Print"/>
-            </div>
-        </div>
-    </button>
+                    <div class="device-list__badges">
+                        <StatusBadge Label="Scan"
+                                     Icon="@Icons.Material.Filled.DocumentScanner"
+                                     Color="Color.Primary"/>
+                    </div>
+                </div>
+            </button>
+        }
+    }
 </div>

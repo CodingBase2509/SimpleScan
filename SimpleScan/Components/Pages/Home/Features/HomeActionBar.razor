@@ -7,6 +7,9 @@
         <AppButton StartIcon="@Icons.Material.Filled.DocumentScanner"
                    Size="Size.Large"
                    Class="home-action-bar__button"
+                   Disabled="@(!CanScan)"
+                   Loading="@IsStartingScan"
+                   OnClick="@StartScanClicked"
                    FullWidth="true">
             Scan
         </AppButton>

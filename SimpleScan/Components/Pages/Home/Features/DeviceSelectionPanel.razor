@@ -2,10 +2,14 @@
     <div class="device-selection-panel__header">
         <MudText Typo="Typo.h6">Available devices</MudText>
 
-        <StatusBadge Label="Discovery idle"
+        <StatusBadge Label="@DiscoveryStatusLabel"
                      Icon="@Icons.Material.Filled.RadioButtonUnchecked"
                      Color="Color.Default"/>
     </div>
 
-    <DeviceList/>
+    <DeviceList Devices="@Devices"
+                SelectedDeviceId="@SelectedDeviceId"
+                IsLoading="@IsLoading"
+                ErrorMessage="@ErrorMessage"
+                SelectedDeviceIdChanged="@SelectedDeviceIdChanged"/>
 </section>

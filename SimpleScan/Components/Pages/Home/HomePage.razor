@@ -6,7 +6,9 @@
         <Actions>
             <IconButton Icon="@Icons.Material.Filled.Refresh"
                         Tooltip="Refresh devices"
-                        AriaLabel="Refresh devices"/>
+                        AriaLabel="Refresh devices"
+                        Disabled="@ViewModel.IsLoadingDevices"
+                        OnClick="@(_ => ViewModel.RefreshDevicesAsync())"/>
             <IconButton Icon="@Icons.Material.Filled.Settings"
                         Tooltip="Settings"
                         AriaLabel="Settings"/>
@@ -14,7 +16,12 @@
     </PageHeader>
 
     <section class="home-page__content" id="1">
-        <DeviceSelectionPanel/>
+        <DeviceSelectionPanel Devices="@ViewModel.Devices"
+                              SelectedDeviceId="@ViewModel.SelectedDeviceId"
+                              DiscoveryStatusLabel="@ViewModel.DiscoveryStatusLabel"
+                              IsLoading="@ViewModel.IsLoadingDevices"
+                              ErrorMessage="@ViewModel.ErrorMessage"
+                              SelectedDeviceIdChanged="@ViewModel.SelectDevice"/>
         
         <MudDivider 
             DividerType="DividerType.FullWidth"
@@ -22,6 +29,8 @@
             Style="width: 0.2rem;"
         />
         
-        <HomeActionBar />
+        <HomeActionBar CanScan="@ViewModel.CanStartScan"
+                       IsStartingScan="@ViewModel.IsStartingScan"
+                       StartScanClicked="@ViewModel.StartScanAsync"/>
     </section>
 </main>
