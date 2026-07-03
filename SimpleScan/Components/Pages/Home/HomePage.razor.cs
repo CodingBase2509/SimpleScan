@@ -6,5 +6,5 @@ namespace SimpleScan.Components.Pages.Home;
 public partial class HomePage
 {
     [Inject]
-    public HomePageViewModel ViewModel { get; set; }
+    public HomePageViewModel ViewModel { get; set; } = default!;
 }

@@ -1,1 +1,23 @@
+<MudButton Variant="@Variant"
+           Color="@Color"
+           Size="@Size"
+           Disabled="@IsDisabled"
+           StartIcon="@StartIcon"
+           EndIcon="@EndIcon"
+           ButtonType="@ButtonType"
+           Href="@Href"
+           FullWidth="@FullWidth"
+           Class="@Class"
+           Style="@Style"
+           OnClick="@OnClick"
+           @attributes="UserAttributes">
+    @if (Loading)
+    {
+        <MudProgressCircular Class="app-button__progress"
+                             Size="Size.Small"
+                             Color="Color.Inherit"
+                             Indeterminate="true"/>
+    }
 
+    @ChildContent
+</MudButton>

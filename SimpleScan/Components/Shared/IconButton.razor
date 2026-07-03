@@ -1,1 +1,15 @@
-
+<MudTooltip Text="@Tooltip"
+            Disabled="@string.IsNullOrWhiteSpace(Tooltip)"
+            Placement="@TooltipPlacement">
+    <MudIconButton Icon="@Icon"
+                   Color="@Color"
+                   Size="@Size"
+                   Variant="@Variant"
+                   Disabled="@Disabled"
+                   Edge="@Edge"
+                   aria-label="@AriaLabel"
+                   Class="@Class"
+                   Style="@Style"
+                   OnClick="@OnClick"
+                   @attributes="UserAttributes"/>
+</MudTooltip>

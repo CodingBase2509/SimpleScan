@@ -1,1 +1,15 @@
+<div class="loading-overlay-host @Class"
+     style="@Style"
+     @attributes="UserAttributes">
+    @ChildContent
 
+    @if (Visible)
+    {
+        <div class="loading-overlay"
+             style="z-index: @ZIndex;">
+            <LoadingState Message="@Message"
+                          Color="@Color"
+                          Size="@Size"/>
+        </div>
+    }
+</div>

@@ -1,1 +1,17 @@
+@if (!string.IsNullOrWhiteSpace(Message) || ChildContent is not null)
+{
+    <MudAlert Severity="@Severity"
+              Variant="@Variant"
+              Dense="@Dense"
+              Icon="@Icon"
+              Class="@Class"
+              Style="@Style"
+              @attributes="UserAttributes">
+        @if (!string.IsNullOrWhiteSpace(Message))
+        {
+            @Message
+        }
 
+        @ChildContent
+    </MudAlert>
+}

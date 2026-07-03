@@ -1,1 +1,14 @@
+.loading-overlay-host {
+    position: relative;
+    min-width: 0;
+}
 
+.loading-overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(2px);
+}

@@ -1,1 +1,44 @@
+<header class="page-header @Class"
+        style="@Style"
+        @attributes="UserAttributes">
+    <div class="page-header__main">
+        @if (!string.IsNullOrWhiteSpace(Icon))
+        {
+            <MudIcon Icon="@Icon"
+                     Color="@IconColor"
+                     Size="Size.Large"/>
+        }
 
+        <div class="page-header__text">
+            @if (!string.IsNullOrWhiteSpace(Eyebrow))
+            {
+                <MudText Typo="Typo.overline"
+                         Color="Color.Secondary">
+                    @Eyebrow
+                </MudText>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Title))
+            {
+                <MudText Typo="@TitleTypo">@Title</MudText>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Subtitle))
+            {
+                <MudText Typo="Typo.body2"
+                         Color="Color.Secondary">
+                    @Subtitle
+                </MudText>
+            }
+
+            @ChildContent
+        </div>
+    </div>
+
+    @if (Actions is not null)
+    {
+        <div class="page-header__actions">
+            @Actions
+        </div>
+    }
+</header>

@@ -1,1 +1,8 @@
+.error-state {
+    width: 100%;
+}
 
+.error-state__content {
+    display: grid;
+    gap: 0.75rem;
+}

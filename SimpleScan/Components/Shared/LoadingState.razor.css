@@ -1,1 +1,7 @@
-
+.loading-state {
+    display: grid;
+    justify-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    text-align: center;
+}

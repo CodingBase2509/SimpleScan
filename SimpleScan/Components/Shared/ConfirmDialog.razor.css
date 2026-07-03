@@ -1,1 +1,11 @@
+.confirm-dialog {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
 
+.confirm-dialog__content {
+    display: grid;
+    gap: 0.5rem;
+    min-width: 0;
+}

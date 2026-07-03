@@ -12,5 +12,5 @@ public partial class ScanPage
     public Guid? PageId { get; set; }
     
     [Inject]
-    public ScanPageViewModel ViewModel { get; set; }
+    public ScanPageViewModel ViewModel { get; set; } = default!;
 }
