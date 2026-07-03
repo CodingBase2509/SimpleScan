@@ -191,13 +191,14 @@ Konsequenzen:
 - `FileStorage` enthaelt Datei-Ports und einfache Datei-Modelle.
 - `Processing` trennt Bildverarbeitung von PDF-Erzeugung.
 - `Stores` haelt Metadaten und aktuellen App-Zustand, aber keine Dateien.
-- `Downloads` arbeitet mit einfachen Download-Tickets, die auf exportierte Dateien im FileStorage zeigen.
+- `Downloads` arbeitet mit einfachen Download-Tickets. Im aktuellen MVP-Stand koennen Tickets bereits erzeugt werden, bevor PDF-Datei und technischer Download-Endpunkt implementiert sind.
 
 Aktuelle Application-Services:
 
-- `Scanning/ScanDocumentService`: Dokument erstellen, laden, schliessen und loeschen.
-- `Scanning/ScanPageService`: Seite scannen, Original speichern, Seite ans Dokument haengen, Seite loeschen und Seitenreihenfolge aendern.
+- `Scanning/ScanDocumentService`: Dokument mit validierten Scanner-Settings erstellen, laden, Scanner-Settings aktualisieren, schliessen und inklusive Dateien loeschen.
+- `Scanning/ScanPageService`: Seite scannen, Original speichern, Preview/Thumbnail erzeugen, Page-Edit-Settings setzen, Preview/Thumbnail regenerieren, Seite loeschen und Seitenreihenfolge aendern.
 - `Scanners/ScannerService`: Scanner entdecken, bekannte Scanner speichern, Capabilities cachen und Status lesen.
+- `Downloads/DownloadTicketService`: kurzlebiges Download-Ticket fuer einen spaeteren PDF-Export erzeugen.
 
 ## ADR-013: Gemeinsame Build-Defaults und Global Usings
 
@@ -219,6 +220,21 @@ Konsequenzen:
 - Projektdateien enthalten weniger wiederholte Konfiguration.
 - SDK-Implicit-Usings werden weiterhin vom Build in `obj/.../*.GlobalUsings.g.cs` erzeugt.
 - Wenn `obj/` geloescht wurde, kann die IDE erst nach Restore/Build alle generierten implicit usings sehen.
+
+## ADR-014: Image Processing mit ImageSharp 3.x
+
+Status: entschieden
+
+Die Infrastructure implementiert `IImageProcessor` mit ImageSharp. Der Service erzeugt aus gescannten Originaldateien Preview-, Thumbnail- und PDF-Render-Dateien und wendet dabei einfache Seiteneinstellungen wie Crop, Rotation, Resize, Graustufen, Helligkeit und Kontrast an.
+
+Aktuell wird `SixLabors.ImageSharp` in Version `3.1.11` verwendet.
+
+Konsequenzen:
+
+- Image Processing bleibt ein technischer Adapter in `SimpleScan.Infrastructure`.
+- `SimpleScan.Application` kennt nur den Port `IImageProcessor` und keine konkrete Bildbibliothek.
+- ImageSharp 4.x wird fuer den MVP vermieden, weil der Build ohne Six-Labors-Lizenzdatei oder Lizenz-Key fehlschlaegt.
+- Wenn spaeter eine kommerzielle Lizenz oder eine andere Bildbibliothek gewuenscht ist, wird nur die Infrastructure-Implementierung ausgetauscht.
 
 ## Verwandte Knoten
 

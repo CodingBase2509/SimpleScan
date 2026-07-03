@@ -37,7 +37,7 @@ Der temporaere Speicherpfad ist `/data/scan-documents/...`. In Docker soll diese
 
 - Kein Mehrbenutzerbetrieb im MVP.
 - Keine parallelen Workflows im MVP.
-- Kein Page Editing im ersten MVP.
+- Kein vollstaendiges Page-Editing-UI im ersten MVP. Backend-Settings fuer einfache Seitenanpassungen koennen bereits vorhanden sein, um Preview/Thumbnail-Regeneration sauber vorzubereiten.
 - Kein OCR im MVP.
 - Kein Dokumentenarchiv im MVP.
 - Kein Druckmodul im MVP.

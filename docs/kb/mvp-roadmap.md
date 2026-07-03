@@ -3,10 +3,33 @@ id: KB-MVP-ROADMAP
 title: MVP-Roadmap
 tags: [mvp, roadmap, phases]
 status: active
-updated: 2026-06-26
+updated: 2026-07-03
 ---
 
 # MVP-Roadmap
+
+## Aktueller MVP-Backend-Stand
+
+Status: in Umsetzung
+
+Abgedeckte Business-Use-Cases:
+
+- Scanner ueber `ScannerService.DiscoverAsync` auflisten.
+- Scanner-Capabilities ueber `ScannerService.GetCapabilitiesAsync` laden und cachen.
+- Scan-Dokument mit validierten Scanner-Settings erstellen.
+- Scanner-Settings eines offenen Dokuments aktualisieren.
+- Seite scannen, Original speichern und Preview/Thumbnail erzeugen.
+- Bestehende Seiten sortieren.
+- Gescannte Seite inklusive Original, Preview und Thumbnail loeschen.
+- Page-Edit-Settings setzen und Preview/Thumbnail neu erzeugen.
+- Download-Ticket fuer spaeteren PDF-Export vorbereiten.
+
+Noch bewusst offen:
+
+- Echter Scanner-Provider.
+- PDF-Erzeugung.
+- Technischer Download-Endpunkt.
+- UI-Durchstich fuer den kompletten Workflow.
 
 ## Phase 0: Knowledge-Base und Projektklarheit
 

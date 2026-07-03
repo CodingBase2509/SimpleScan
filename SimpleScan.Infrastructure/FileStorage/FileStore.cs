@@ -128,11 +128,11 @@ public sealed class FileStore : IScanFileStorage
             throw new ArgumentException("File name cannot be empty.", nameof(fileName));
         }
 
-        var filePath = EnsurePathIsInsideBasePath(Path.Combine(safeFolderPath, safeFileName));
+        var filePath = GetAvailableFilePath(safeFolderPath, safeFileName);
 
         await using (var output = new FileStream(
                          filePath,
-                         FileMode.Create,
+                         FileMode.CreateNew,
                          FileAccess.Write,
                          FileShare.None,
                          bufferSize: 81920,
@@ -147,7 +147,32 @@ public sealed class FileStore : IScanFileStorage
         }
 
         var fileInfo = new FileInfo(filePath);
-        return new StoredFile(fileInfo.FullName, safeFileName, file.ContentType, fileInfo.Length);
+        return new StoredFile(fileInfo.FullName, fileInfo.Name, file.ContentType, fileInfo.Length);
+    }
+
+    private string GetAvailableFilePath(string folderPath, string fileName)
+    {
+        var filePath = EnsurePathIsInsideBasePath(Path.Combine(folderPath, fileName));
+        if (!File.Exists(filePath))
+        {
+            return filePath;
+        }
+
+        var name = Path.GetFileNameWithoutExtension(fileName);
+        var extension = Path.GetExtension(fileName);
+
+        for (var attempt = 1; attempt <= 100; attempt++)
+        {
+            var candidateName = $"{name}-{Guid.NewGuid():N}{extension}";
+            var candidatePath = EnsurePathIsInsideBasePath(Path.Combine(folderPath, candidateName));
+
+            if (!File.Exists(candidatePath))
+            {
+                return candidatePath;
+            }
+        }
+
+        throw new IOException($"Could not create a unique file name for '{fileName}'.");
     }
 
     private string EnsurePathIsInsideBasePath(string path)

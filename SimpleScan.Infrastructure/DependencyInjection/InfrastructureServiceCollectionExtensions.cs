@@ -3,11 +3,14 @@ using Microsoft.Extensions.DependencyInjection;
 using SimpleScan.Application.Downloads;
 using SimpleScan.Application.Events;
 using SimpleScan.Application.FileStorage;
+using SimpleScan.Application.Processing.Images;
 using SimpleScan.Application.Scanners;
+using SimpleScan.Application.Scanning;
 using SimpleScan.Application.Stores;
 using SimpleScan.Infrastructure.Events;
 using SimpleScan.Infrastructure.FileStorage;
 using SimpleScan.Infrastructure.Options;
+using SimpleScan.Infrastructure.Processing.Images;
 using SimpleScan.Infrastructure.Scanning;
 using SimpleScan.Infrastructure.Stores;
 
@@ -24,7 +27,13 @@ public static class InfrastructureServiceCollectionExtensions
 
         services.AddSingleton(TimeProvider.System);
 
+        services.AddScoped<ScanDocumentService>();
+        services.AddScoped<ScanPageService>();
+        services.AddScoped<ScannerService>();
+        services.AddScoped<DownloadTicketService>();
+
         services.AddSingleton<IScanFileStorage, FileStore>();
+        services.AddSingleton<IImageProcessor, ImageSharpImageProcessor>();
         services.AddSingleton<IScanDocumentStore, InMemoryScanDocumentStore>();
         services.AddSingleton<IScannerStore, InMemoryScannerStore>();
         services.AddSingleton<IDownloadTicketStore, InMemoryDownloadStore>();

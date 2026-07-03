@@ -7,7 +7,7 @@ public sealed class DownloadTicket
     public DownloadTicket(
         string token,
         Guid documentId,
-        string filePath,
+        string? filePath,
         string fileName,
         DateTime createdAtUtc,
         DateTime expiresAtUtc)
@@ -19,7 +19,7 @@ public sealed class DownloadTicket
 
         Token = Guard.NotWhiteSpace(token, nameof(token));
         DocumentId = documentId;
-        FilePath = Guard.NotWhiteSpace(filePath, nameof(filePath));
+        FilePath = string.IsNullOrWhiteSpace(filePath) ? null : filePath.Trim();
         FileName = Guard.NotWhiteSpace(fileName, nameof(fileName));
         CreatedAtUtc = Guard.Utc(createdAtUtc, nameof(createdAtUtc));
         ExpiresAtUtc = Guard.Utc(expiresAtUtc, nameof(expiresAtUtc));
@@ -34,7 +34,7 @@ public sealed class DownloadTicket
 
     public Guid DocumentId { get; }
 
-    public string FilePath { get; }
+    public string? FilePath { get; }
 
     public string FileName { get; }
 
