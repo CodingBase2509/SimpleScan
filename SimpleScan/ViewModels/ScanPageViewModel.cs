@@ -25,6 +25,8 @@ public sealed class ScanPageViewModel(
 
     public bool IsUpdatingPages { get; private set; }
 
+    public bool IsCancelling { get; private set; }
+
     public string? ErrorMessage { get; private set; }
 
     public ScanDocument? Document { get; private set; }
@@ -49,11 +51,14 @@ public sealed class ScanPageViewModel(
         Document.Status is not ScanDocumentStatus.Closed &&
         !IsLoading &&
         !IsScanning &&
-        !IsUpdatingPages;
+        !IsUpdatingPages &&
+        !IsCancelling;
 
-    public bool CanEditPage => SelectedPage is not null && !IsLoading && !IsScanning && !IsUpdatingPages;
+    public bool CanEditPage => SelectedPage is not null && !IsLoading && !IsScanning && !IsUpdatingPages && !IsCancelling;
 
-    public bool CanSave => Document is not null && Pages.Count > 0 && !IsLoading && !IsScanning && !IsUpdatingPages;
+    public bool CanSave => Document is not null && Pages.Count > 0 && !IsLoading && !IsScanning && !IsUpdatingPages && !IsCancelling;
+
+    public bool CanCancel => Document is not null && !IsLoading && !IsScanning && !IsUpdatingPages && !IsCancelling;
 
     public string? PreviewUrl =>
         SelectedPage?.PreviewPath is null
@@ -181,6 +186,37 @@ public sealed class ScanPageViewModel(
         finally
         {
             IsUpdatingPages = false;
+            NotifyStateChanged();
+        }
+    }
+
+    public async Task CancelAsync()
+    {
+        if (!CanCancel)
+        {
+            return;
+        }
+
+        IsCancelling = true;
+        ErrorMessage = null;
+        NotifyStateChanged();
+
+        try
+        {
+            await scanDocumentService.DeleteAsync(DocumentId, CancellationToken.None);
+            Document = null;
+            Scanner = null;
+            Capabilities = null;
+            SelectedPageId = null;
+            navigationManager.NavigateTo("/");
+        }
+        catch (Exception exception)
+        {
+            ErrorMessage = exception.Message;
+        }
+        finally
+        {
+            IsCancelling = false;
             NotifyStateChanged();
         }
     }

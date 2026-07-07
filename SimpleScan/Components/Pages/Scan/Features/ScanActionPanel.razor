@@ -23,6 +23,9 @@
     <div class="scan-action-panel__secondary">
         <AppButton Color="Color.Default"
                    Variant="Variant.Outlined"
+                   Disabled="@(!CanCancel)"
+                   Loading="@IsCancelling"
+                   OnClick="@(_ => CancelClicked.InvokeAsync())"
                    FullWidth="true">
             Cancel
         </AppButton>

@@ -14,8 +14,17 @@ public partial class ScanActionPanel
     public bool CanSave { get; set; }
 
     [Parameter]
+    public bool CanCancel { get; set; }
+
+    [Parameter]
     public bool IsScanning { get; set; }
 
     [Parameter]
+    public bool IsCancelling { get; set; }
+
+    [Parameter]
     public EventCallback ScanClicked { get; set; }
+
+    [Parameter]
+    public EventCallback CancelClicked { get; set; }
 }

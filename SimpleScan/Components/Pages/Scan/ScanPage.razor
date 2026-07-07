@@ -34,7 +34,10 @@
         <ScanActionPanel CanScan="@ViewModel.CanScan"
                          CanEditPage="@ViewModel.CanEditPage"
                          CanSave="@ViewModel.CanSave"
+                         CanCancel="@ViewModel.CanCancel"
                          IsScanning="@ViewModel.IsScanning"
-                         ScanClicked="@ViewModel.ScanPageAsync"/>
+                         IsCancelling="@ViewModel.IsCancelling"
+                         ScanClicked="@ViewModel.ScanPageAsync"
+                         CancelClicked="@ViewModel.CancelAsync"/>
     </aside>
 </main>
