@@ -1,1 +1,22 @@
-
+<section class="scanned-pages-strip" aria-label="Scanned pages">
+    <div class="scanned-pages-strip__items">
+        @if (PageCount == 0)
+        {
+            <div class="scanned-pages-strip__empty">
+                <MudText Typo="Typo.body2" Color="Color.Secondary">No pages scanned yet</MudText>
+            </div>
+        }
+        else
+        {
+            @for (var pageNumber = 1; pageNumber <= PageCount; pageNumber++)
+            {
+                <button class="@GetThumbnailClass(pageNumber)"
+                        type="button"
+                        aria-label="@($"Open page {pageNumber}")">
+                    <span class="scanned-pages-strip__thumbnail"></span>
+                    <span class="scanned-pages-strip__number">@pageNumber</span>
+                </button>
+            }
+        }
+    </div>
+</section>

@@ -1,2 +1,16 @@
+@using SimpleScan.Components.Pages.Scan.Features
 @page "/scan/{DocumentId:guid}"
 @page "/scan/{DocumentId:guid}/{PageId:guid}"
+
+<main class="scan-page">
+    <section class="scan-page__preview">
+        <PagePreview />
+        <ScannedPagesStrip />
+    </section>
+    
+    <aside class="scan-page__sidebar">
+        <ScannerSelectionBar />
+        <ScanSettingsPanel />
+        <ScanActionPanel />
+    </aside>
+</main>

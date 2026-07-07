@@ -1,1 +1,36 @@
+.scan-page {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 28rem;
+    min-height: 100vh;
+    background: #f8f8f9;
+}
 
+.scan-page__preview {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 1rem;
+    min-width: 0;
+    padding: 1.5rem;
+    background: #ffffff;
+}
+
+.scan-page__sidebar {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    background: #efeff0;
+    border-left: 1px solid rgba(0, 0, 0, 0.08);
+    min-width: 0;
+}
+
+@media (max-width: 900px) {
+    .scan-page {
+        grid-template-columns: 1fr;
+    }
+
+    .scan-page__sidebar {
+        border-left: 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+}

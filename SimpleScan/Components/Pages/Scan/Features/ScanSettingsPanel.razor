@@ -1,1 +1,47 @@
+<section class="scan-settings-panel">
+    <MudText Typo="Typo.h6">Scan settings</MudText>
 
+    <div class="scan-settings-panel__fields">
+        <MudSelect T="int"
+                   Label="Resolution"
+                   Value="300"
+                   Variant="Variant.Outlined"
+                   Dense="true">
+            <MudSelectItem T="int" Value="150">150 DPI</MudSelectItem>
+            <MudSelectItem T="int" Value="200">200 DPI</MudSelectItem>
+            <MudSelectItem T="int" Value="300">300 DPI</MudSelectItem>
+        </MudSelect>
+
+        <MudSelect T="string"
+                   Label="Color mode"
+                   Value="@("Color")"
+                   Variant="Variant.Outlined"
+                   Dense="true">
+            <MudSelectItem T="string" Value="@("Color")">Color</MudSelectItem>
+            <MudSelectItem T="string" Value="@("Grayscale")">Grayscale</MudSelectItem>
+            <MudSelectItem T="string" Value="@("Black and white")">Black and white</MudSelectItem>
+        </MudSelect>
+
+        <MudSelect T="string"
+                   Label="Paper size"
+                   Value="@("A4")"
+                   Variant="Variant.Outlined"
+                   Dense="true">
+            <MudSelectItem T="string" Value="@("A4")">A4</MudSelectItem>
+        </MudSelect>
+
+        <MudSelect T="string"
+                   Label="Source"
+                   Value="@("Flatbed")"
+                   Variant="Variant.Outlined"
+                   Dense="true">
+            <MudSelectItem T="string" Value="@("Flatbed")">Flatbed</MudSelectItem>
+        </MudSelect>
+
+        <MudSwitch T="bool"
+                   Label="Duplex"
+                   Value="false"
+                   Disabled="true"
+                   Color="Color.Primary"/>
+    </div>
+</section>

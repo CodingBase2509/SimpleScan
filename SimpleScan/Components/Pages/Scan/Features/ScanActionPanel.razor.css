@@ -1,1 +1,27 @@
+.scan-action-panel {
+    display: grid;
+    gap: 2rem;
+    align-self: end;
+}
 
+.scan-action-panel__primary,
+.scan-action-panel__secondary {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.scan-action-panel__secondary {
+    grid-template-columns: 1fr 1fr;
+}
+
+::deep .scan-action-panel__button {
+    min-height: 3.25rem;
+    font-weight: 600;
+    letter-spacing: 0;
+}
+
+@media (max-width: 480px) {
+    .scan-action-panel__secondary {
+        grid-template-columns: 1fr;
+    }
+}

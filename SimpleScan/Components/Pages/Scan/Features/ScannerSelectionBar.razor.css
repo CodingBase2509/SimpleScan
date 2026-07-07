@@ -1,1 +1,6 @@
-
+.scanner-selection-bar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.75rem;
+    align-items: center;
+}

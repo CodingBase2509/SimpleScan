@@ -1,1 +1,35 @@
+<section class="scan-action-panel">
+    <div class="scan-action-panel__primary">
+        <AppButton StartIcon="@Icons.Material.Filled.DocumentScanner"
+                   Size="Size.Large"
+                   Class="scan-action-panel__button"
+                   Disabled="@(!CanScan)"
+                   OnClick="@(_ => ScanClicked.InvokeAsync())"
+                   FullWidth="true">
+            New page
+        </AppButton>
 
+        <AppButton StartIcon="@Icons.Material.Filled.Edit"
+                   Color="Color.Default"
+                   Variant="Variant.Outlined"
+                   Class="scan-action-panel__button"
+                   Disabled="@(!CanEditPage)"
+                   FullWidth="true">
+            Edit page
+        </AppButton>
+    </div>
+
+    <div class="scan-action-panel__secondary">
+        <AppButton Color="Color.Default"
+                   Variant="Variant.Outlined"
+                   FullWidth="true">
+            Cancel
+        </AppButton>
+
+        <AppButton StartIcon="@Icons.Material.Filled.Save"
+                   Disabled="@(!CanSave)"
+                   FullWidth="true">
+            Save
+        </AppButton>
+    </div>
+</section>

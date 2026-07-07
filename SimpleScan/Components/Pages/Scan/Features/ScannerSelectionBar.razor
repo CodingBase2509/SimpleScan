@@ -1,1 +1,15 @@
+<section class="scanner-selection-bar">
+    <MudSelect T="string"
+               Label="Scanner"
+               Value="@SelectedScannerLabel"
+               Variant="Variant.Outlined"
+               Dense="true"
+               Disabled="@IsLoading">
+        <MudSelectItem T="string" Value="@SelectedScannerLabel">@SelectedScannerLabel</MudSelectItem>
+    </MudSelect>
 
+    <IconButton Icon="@Icons.Material.Filled.Info"
+                Tooltip="Scanner status"
+                AriaLabel="Scanner status"
+                Disabled="@IsLoading"/>
+</section>

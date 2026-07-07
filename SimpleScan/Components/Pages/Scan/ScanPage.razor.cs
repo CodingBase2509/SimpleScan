@@ -13,4 +13,9 @@ public partial class ScanPage
     
     [Inject]
     public ScanPageViewModel ViewModel { get; set; } = default!;
+    
+    protected override async Task OnParametersSetAsync()
+    {
+        await ViewModel.InitializeAsync(DocumentId, PageId);
+    }
 }
