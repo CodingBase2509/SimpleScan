@@ -4,6 +4,7 @@
                    Size="Size.Large"
                    Class="scan-action-panel__button"
                    Disabled="@(!CanScan)"
+                   Loading="@IsScanning"
                    OnClick="@(_ => ScanClicked.InvokeAsync())"
                    FullWidth="true">
             New page

@@ -3,7 +3,7 @@ using SimpleScan.ViewModels;
 
 namespace SimpleScan.Components.Pages.Scan;
 
-public partial class ScanPage
+public partial class ScanPage : IDisposable
 {
     [Parameter]
     public Guid DocumentId { get; set; }
@@ -16,6 +16,16 @@ public partial class ScanPage
     
     protected override async Task OnParametersSetAsync()
     {
+        ViewModel.StateChanged -= OnViewModelStateChanged;
+        ViewModel.StateChanged += OnViewModelStateChanged;
         await ViewModel.InitializeAsync(DocumentId, PageId);
     }
+
+    public void Dispose()
+    {
+        ViewModel.StateChanged -= OnViewModelStateChanged;
+    }
+
+    private void OnViewModelStateChanged() =>
+        InvokeAsync(StateHasChanged);
 }

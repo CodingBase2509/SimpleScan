@@ -4,44 +4,56 @@
     <div class="scan-settings-panel__fields">
         <MudSelect T="int"
                    Label="Resolution"
-                   Value="300"
+                   Value="@SelectedDpi"
                    Variant="Variant.Outlined"
-                   Dense="true">
-            <MudSelectItem T="int" Value="150">150 DPI</MudSelectItem>
-            <MudSelectItem T="int" Value="200">200 DPI</MudSelectItem>
-            <MudSelectItem T="int" Value="300">300 DPI</MudSelectItem>
+                   Dense="true"
+                   Disabled="@Disabled">
+            @foreach (var dpi in SupportedDpi)
+            {
+                <MudSelectItem T="int" Value="@dpi">@($"{dpi} DPI")</MudSelectItem>
+            }
         </MudSelect>
 
-        <MudSelect T="string"
+        <MudSelect T="ScanColorMode"
                    Label="Color mode"
-                   Value="@("Color")"
+                   Value="@SelectedColorMode"
                    Variant="Variant.Outlined"
-                   Dense="true">
-            <MudSelectItem T="string" Value="@("Color")">Color</MudSelectItem>
-            <MudSelectItem T="string" Value="@("Grayscale")">Grayscale</MudSelectItem>
-            <MudSelectItem T="string" Value="@("Black and white")">Black and white</MudSelectItem>
+                   Dense="true"
+                   Disabled="@Disabled">
+            @foreach (var colorMode in SupportedColorModes)
+            {
+                <MudSelectItem T="ScanColorMode" Value="@colorMode">@GetColorModeLabel(colorMode)</MudSelectItem>
+            }
         </MudSelect>
 
         <MudSelect T="string"
                    Label="Paper size"
-                   Value="@("A4")"
+                   Value="@SelectedPaperSize"
                    Variant="Variant.Outlined"
-                   Dense="true">
-            <MudSelectItem T="string" Value="@("A4")">A4</MudSelectItem>
+                   Dense="true"
+                   Disabled="@Disabled">
+            @foreach (var paperSize in SupportedPaperSizes)
+            {
+                <MudSelectItem T="string" Value="@paperSize">@paperSize</MudSelectItem>
+            }
         </MudSelect>
 
         <MudSelect T="string"
                    Label="Source"
-                   Value="@("Flatbed")"
+                   Value="@SelectedSource"
                    Variant="Variant.Outlined"
-                   Dense="true">
-            <MudSelectItem T="string" Value="@("Flatbed")">Flatbed</MudSelectItem>
+                   Dense="true"
+                   Disabled="@Disabled">
+            @foreach (var source in SupportedSources)
+            {
+                <MudSelectItem T="string" Value="@source">@source</MudSelectItem>
+            }
         </MudSelect>
 
         <MudSwitch T="bool"
                    Label="Duplex"
-                   Value="false"
-                   Disabled="true"
+                   Value="@SelectedDuplex"
+                   Disabled="@(Disabled || !SupportsDuplex)"
                    Color="Color.Primary"/>
     </div>
 </section>

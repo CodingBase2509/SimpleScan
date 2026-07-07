@@ -1,17 +1,52 @@
 using Microsoft.AspNetCore.Components;
+using SimpleScan.Domain.Documents;
+using SimpleScan.ViewModels;
 
 namespace SimpleScan.Components.Pages.Scan.Features;
 
 public partial class ScannedPagesStrip
 {
     [Parameter]
-    public int PageCount { get; set; }
+    public Guid DocumentId { get; set; }
+
+    [Parameter]
+    public IReadOnlyList<ScannedPage> Pages { get; set; } = [];
 
     [Parameter]
     public Guid? SelectedPageId { get; set; }
 
-    private static string GetThumbnailClass(int pageNumber) =>
-        pageNumber == 1
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    [Parameter]
+    public EventCallback<Guid> PageSelected { get; set; }
+
+    [Parameter]
+    public EventCallback<Guid> MovePageEarlier { get; set; }
+
+    [Parameter]
+    public EventCallback<Guid> MovePageLater { get; set; }
+
+    [Parameter]
+    public EventCallback<Guid> DeletePage { get; set; }
+
+    private string GetItemClass(ScannedPage page) =>
+        page.Id == SelectedPageId
             ? "scanned-pages-strip__item scanned-pages-strip__item--selected"
             : "scanned-pages-strip__item";
+
+    private static string GetOpenPageLabel(ScannedPage page) =>
+        $"Open page {page.PageNumber}";
+
+    private static string GetThumbnailAlt(ScannedPage page) =>
+        $"Page {page.PageNumber} thumbnail";
+
+    private static string GetMoveEarlierLabel(ScannedPage page) =>
+        $"Move page {page.PageNumber} left";
+
+    private static string GetMoveLaterLabel(ScannedPage page) =>
+        $"Move page {page.PageNumber} right";
+
+    private static string GetDeleteLabel(ScannedPage page) =>
+        $"Delete page {page.PageNumber}";
 }

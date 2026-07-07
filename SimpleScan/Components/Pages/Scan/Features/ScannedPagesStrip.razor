@@ -1,22 +1,62 @@
 <section class="scanned-pages-strip" aria-label="Scanned pages">
-    <div class="scanned-pages-strip__items">
-        @if (PageCount == 0)
+    @if (Pages.Count == 0)
+    {
+        <div class="scanned-pages-strip__empty">
+            <MudText Typo="Typo.body2" Color="Color.Secondary">No pages scanned yet</MudText>
+        </div>
+    }
+    else
+    {
+        @foreach (var page in Pages)
         {
-            <div class="scanned-pages-strip__empty">
-                <MudText Typo="Typo.body2" Color="Color.Secondary">No pages scanned yet</MudText>
-            </div>
-        }
-        else
-        {
-            @for (var pageNumber = 1; pageNumber <= PageCount; pageNumber++)
-            {
-                <button class="@GetThumbnailClass(pageNumber)"
+            <article class="@GetItemClass(page)">
+                <button class="scanned-pages-strip__thumbnail-button"
                         type="button"
-                        aria-label="@($"Open page {pageNumber}")">
-                    <span class="scanned-pages-strip__thumbnail"></span>
-                    <span class="scanned-pages-strip__number">@pageNumber</span>
+                        disabled="@Disabled"
+                        aria-label="@GetOpenPageLabel(page)"
+                        @onclick="() => PageSelected.InvokeAsync(page.Id)">
+                    @if (page.ThumbnailPath is not null)
+                    {
+                        <img class="scanned-pages-strip__thumbnail"
+                             src="@ScanPageViewModel.GetThumbnailUrl(DocumentId, page.Id)"
+                             alt="@GetThumbnailAlt(page)"/>
+                    }
+                    else
+                    {
+                        <span class="scanned-pages-strip__thumbnail"></span>
+                    }
                 </button>
-            }
+
+                <div class="scanned-pages-strip__meta">
+                    <span class="scanned-pages-strip__number">@(page.PageNumber)</span>
+                </div>
+
+                <span class="scanned-pages-strip__actions actions__forward">
+                    <IconButton Icon="@Icons.Material.Filled.KeyboardArrowLeft"
+                                Tooltip="Move page left"
+                                AriaLabel="@GetMoveEarlierLabel(page)"
+                                Size="Size.Small"
+                                Disabled="@(Disabled || page.PageNumber <= 1)"
+                                OnClick="@(_ => MovePageEarlier.InvokeAsync(page.Id))"/>
+                </span>
+                <span class="scanned-pages-strip__actions actions__backwards">
+                    <IconButton Icon="@Icons.Material.Filled.KeyboardArrowRight"
+                                Tooltip="Move page right"
+                                AriaLabel="@GetMoveLaterLabel(page)"
+                                Size="Size.Small"
+                                Disabled="@(Disabled || page.PageNumber >= Pages.Count)"
+                                OnClick="@(_ => MovePageLater.InvokeAsync(page.Id))"/>
+                </span>
+                <span class="scanned-pages-strip__actions actions__delete">
+                    <IconButton Icon="@Icons.Material.Filled.Delete"
+                                Tooltip="Delete page"
+                                AriaLabel="@GetDeleteLabel(page)"
+                                Size="Size.Small"
+                                Color="Color.Error"
+                                Disabled="@Disabled"
+                                OnClick="@(_ => DeletePage.InvokeAsync(page.Id))"/>
+                </span>
+            </article>
         }
-    </div>
+    }
 </section>

@@ -1,5 +1,6 @@
 using SimpleScan.Components;
 using SimpleScan.DependencyInjection;
+using SimpleScan.Endpoints;
 using SimpleScan.Infrastructure.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +28,7 @@ app.UseHttpsRedirection();
 app.UseAntiforgery();
 
 app.MapStaticAssets();
+app.MapScanFileEndpoints();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 

@@ -14,5 +14,8 @@ public partial class ScanActionPanel
     public bool CanSave { get; set; }
 
     [Parameter]
+    public bool IsScanning { get; set; }
+
+    [Parameter]
     public EventCallback ScanClicked { get; set; }
 }

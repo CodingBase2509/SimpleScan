@@ -4,13 +4,37 @@
 
 <main class="scan-page">
     <section class="scan-page__preview">
-        <PagePreview />
-        <ScannedPagesStrip />
+        @if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
+        {
+            <ErrorState Title="Scan document could not be loaded"
+                        Message="@ViewModel.ErrorMessage"/>
+        }
+
+        <PagePreview HasPage="@(ViewModel.SelectedPage is not null)"
+                     PreviewUrl="@ViewModel.PreviewUrl"/>
+
+        <ScannedPagesStrip DocumentId="@ViewModel.DocumentId"
+                           Pages="@ViewModel.Pages"
+                           SelectedPageId="@ViewModel.SelectedPageId"
+                           Disabled="@ViewModel.IsUpdatingPages"
+                           PageSelected="@ViewModel.SelectPageAsync"
+                           MovePageEarlier="@ViewModel.MovePageEarlierAsync"
+                           MovePageLater="@ViewModel.MovePageLaterAsync"
+                           DeletePage="@ViewModel.DeletePageAsync"/>
     </section>
     
     <aside class="scan-page__sidebar">
-        <ScannerSelectionBar />
-        <ScanSettingsPanel />
-        <ScanActionPanel />
+        <ScannerSelectionBar ScannerName="@ViewModel.ScannerName"
+                             IsLoading="@ViewModel.IsLoading"/>
+        
+        <ScanSettingsPanel Settings="@ViewModel.Settings"
+                           Capabilities="@ViewModel.Capabilities"
+                           Disabled="@(ViewModel.IsLoading || ViewModel.IsScanning)"/>
+        
+        <ScanActionPanel CanScan="@ViewModel.CanScan"
+                         CanEditPage="@ViewModel.CanEditPage"
+                         CanSave="@ViewModel.CanSave"
+                         IsScanning="@ViewModel.IsScanning"
+                         ScanClicked="@ViewModel.ScanPageAsync"/>
     </aside>
 </main>

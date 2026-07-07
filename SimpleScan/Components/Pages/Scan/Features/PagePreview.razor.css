@@ -1,7 +1,10 @@
 .page-preview {
     display: grid;
-    place-items: center;
-    overflow: auto;
+    align-items: center;
+    justify-content: center;
+    min-width: 50vw;
+    min-height: 0;
+    overflow: hidden;
 }
 
 .page-preview__placeholder {
@@ -9,16 +12,15 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: min(100%, 32rem);
+    height: min(100%, 35rem);
+    border-radius: 8px;
     aspect-ratio: 0.75 / 1;
     background: #dedede;
     color: #242424;
 }
 
 .page-preview__image {
-    width: auto;
-    
-    max-height: 78vh;
-    object-fit: contain;
-    box-shadow: 0 0.75rem 2.5rem rgba(0, 0, 0, 0.18);
+    display: block;
+    height: min(100%, 80vh);
+    object-fit: cover;
 }
