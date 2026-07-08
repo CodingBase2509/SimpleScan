@@ -12,8 +12,8 @@ public sealed class InMemoryScanDocumentStore : IScanDocumentStore
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        return _documents.TryGetValue(documentId, out var doc) 
-            ? Task.FromResult(doc) 
+        return _documents.TryGetValue(documentId, out var document)
+            ? Task.FromResult<ScanDocument?>(document)
             : Task.FromResult<ScanDocument?>(null);
     }
 

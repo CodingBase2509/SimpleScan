@@ -26,8 +26,8 @@ public sealed class InMemoryDownloadStore : IDownloadTicketStore
             return Task.FromResult<DownloadTicket?>(null);
         }
 
-        return _tickets.TryGetValue(token, out DownloadTicket? ticket)
-            ? Task.FromResult(ticket)
+        return _tickets.TryGetValue(token, out var ticket)
+            ? Task.FromResult<DownloadTicket?>(ticket)
             : Task.FromResult<DownloadTicket?>(null);
     }
 

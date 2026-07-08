@@ -31,6 +31,21 @@ public sealed class DownloadTicketService
         TimeSpan lifetime,
         CancellationToken cancellationToken)
     {
+        return await CreatePdfExportTicketAsync(
+            documentId,
+            filePath: null,
+            fileName,
+            lifetime,
+            cancellationToken);
+    }
+
+    public async Task<DownloadTicket> CreatePdfExportTicketAsync(
+        Guid documentId,
+        string? filePath,
+        string fileName,
+        TimeSpan lifetime,
+        CancellationToken cancellationToken)
+    {
         if (lifetime <= TimeSpan.Zero)
         {
             throw new ArgumentOutOfRangeException(nameof(lifetime), lifetime, "Lifetime must be greater than zero.");
@@ -45,15 +60,43 @@ public sealed class DownloadTicketService
         }
 
         var createdAtUtc = _timeProvider.GetUtcNow().UtcDateTime;
+        await _tickets.DeleteExpiredAsync(createdAtUtc, cancellationToken);
+
         var ticket = new DownloadTicket(
             CreateToken(),
             document.Id,
-            filePath: null,
+            filePath,
             fileName,
             createdAtUtc,
             createdAtUtc.Add(lifetime));
 
         await _tickets.SaveAsync(ticket, cancellationToken);
+        return ticket;
+    }
+
+    public async Task<DownloadTicket?> ConsumeAsync(string token, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            return null;
+        }
+
+        var utcNow = _timeProvider.GetUtcNow().UtcDateTime;
+        await _tickets.DeleteExpiredAsync(utcNow, cancellationToken);
+
+        var ticket = await _tickets.FindAsync(token, cancellationToken);
+        if (ticket is null)
+        {
+            return null;
+        }
+
+        if (ticket.IsExpired(utcNow))
+        {
+            await _tickets.DeleteAsync(token, cancellationToken);
+            return null;
+        }
+
+        await _tickets.DeleteAsync(token, cancellationToken);
         return ticket;
     }
 

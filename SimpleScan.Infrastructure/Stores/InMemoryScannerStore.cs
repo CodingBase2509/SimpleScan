@@ -34,8 +34,8 @@ public sealed class InMemoryScannerStore : IScannerStore
             return Task.FromResult<ScannerDevice?>(null);
         }
 
-        return _scanners.TryGetValue(scannerId, out var scanner) 
-            ? Task.FromResult(scanner) 
+        return _scanners.TryGetValue(scannerId, out var scanner)
+            ? Task.FromResult<ScannerDevice?>(scanner)
             : Task.FromResult<ScannerDevice?>(null);
     }
 
@@ -63,7 +63,7 @@ public sealed class InMemoryScannerStore : IScannerStore
         }
 
         return _capabilities.TryGetValue(scannerId, out var capabilities)
-            ? Task.FromResult(capabilities)
+            ? Task.FromResult<ScannerCapabilities?>(capabilities)
             : Task.FromResult<ScannerCapabilities?>(null);
     }
 }

@@ -32,6 +32,8 @@
 
         <AppButton StartIcon="@Icons.Material.Filled.Save"
                    Disabled="@(!CanSave)"
+                   Loading="@IsSaving"
+                   OnClick="@(_ => SaveClicked.InvokeAsync())"
                    FullWidth="true">
             Save
         </AppButton>

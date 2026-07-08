@@ -29,6 +29,7 @@ app.UseAntiforgery();
 
 app.MapStaticAssets();
 app.MapScanFileEndpoints();
+app.MapDownloadEndpoints();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
