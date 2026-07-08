@@ -1,0 +1,36 @@
+<MudDialog>
+    <DialogContent>
+        <div class="add-manual-scanner-dialog">
+            <MudTextField @bind-Value="_name"
+                          Label="Device name"
+                          Variant="Variant.Outlined"
+                          Immediate="true"/>
+
+            <MudTextField @bind-Value="_address"
+                          Label="Scanner address"
+                          Placeholder="192.168.1.50 or http://192.168.1.50/eSCL/"
+                          Variant="Variant.Outlined"
+                          Immediate="true"
+                          Required="true"/>
+
+            @if (!string.IsNullOrWhiteSpace(_errorMessage))
+            {
+                <InlineError Message="@_errorMessage"/>
+            }
+        </div>
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton Variant="Variant.Text"
+                   Color="Color.Default"
+                   OnClick="@Cancel">
+            Cancel
+        </MudButton>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   StartIcon="@Icons.Material.Filled.Add"
+                   OnClick="@Save">
+            Add device
+        </MudButton>
+    </DialogActions>
+</MudDialog>

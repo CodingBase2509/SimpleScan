@@ -22,4 +22,7 @@ public partial class DeviceSelectionPanel
 
     [Parameter]
     public EventCallback<string> SelectedDeviceIdChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<string> DeleteDevice { get; set; }
 }

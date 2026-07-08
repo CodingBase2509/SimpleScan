@@ -13,6 +13,10 @@ public sealed class HomePageViewModel(
 {
     public event Action? StateChanged;
 
+    private IReadOnlyList<ScannerDevice> _discoveredDevices = [];
+
+    private IReadOnlyList<ScannerDevice> _manualDevices = [];
+
     public IReadOnlyList<ScannerDevice> Devices { get; private set; } = [];
 
     public string? SelectedDeviceId { get; private set; }
@@ -35,10 +39,26 @@ public sealed class HomePageViewModel(
 
     public async Task InitializeAsync()
     {
-        if (Devices.Count == 0)
+        if (_discoveredDevices.Count == 0)
         {
             await RefreshDevicesAsync();
         }
+    }
+
+    public async Task SetManualDevicesAsync(
+        IReadOnlyList<ScannerDevice> manualDevices,
+        CancellationToken cancellationToken)
+    {
+        _manualDevices = manualDevices;
+
+        foreach (var device in manualDevices)
+        {
+            await scannerService.RememberAsync(device, cancellationToken);
+        }
+
+        MergeDevices();
+        SelectedDeviceId = PreserveSelectionOrSelectFirst(SelectedDeviceId, Devices);
+        NotifyStateChanged();
     }
 
     public async Task RefreshDevicesAsync()
@@ -51,14 +71,16 @@ public sealed class HomePageViewModel(
         try
         {
             var scanners = await scannerService.DiscoverAsync(CancellationToken.None);
-            Devices = scanners;
+            _discoveredDevices = scanners;
+            MergeDevices();
             SelectedDeviceId = PreserveSelectionOrSelectFirst(SelectedDeviceId, Devices);
             DiscoveryStatusLabel = Devices.Count == 0 ? "No devices" : $"{Devices.Count} found";
         }
         catch (Exception exception)
         {
-            Devices = [];
-            SelectedDeviceId = null;
+            _discoveredDevices = [];
+            MergeDevices();
+            SelectedDeviceId = PreserveSelectionOrSelectFirst(SelectedDeviceId, Devices);
             ErrorMessage = exception.Message;
             DiscoveryStatusLabel = "Discovery failed";
         }
@@ -149,6 +171,17 @@ public sealed class HomePageViewModel(
             : capabilities.SupportedSources.FirstOrDefault() ?? "Flatbed";
 
         return new ScanSettings(dpi, colorMode, paperSize, source, duplex: false);
+    }
+
+    private void MergeDevices()
+    {
+        Devices = _discoveredDevices
+            .Concat(_manualDevices)
+            .GroupBy(device => device.Id, StringComparer.Ordinal)
+            .Select(group => group.First())
+            .OrderBy(device => device.Protocol == ScannerProtocol.Mock)
+            .ThenBy(device => device.Name, StringComparer.OrdinalIgnoreCase)
+            .ToArray();
     }
 
     private void NotifyStateChanged() =>

@@ -4,6 +4,10 @@
     <PageHeader Title="SimpleScan"
                 TitleTypo="Typo.h5">
         <Actions>
+            <IconButton Icon="@Icons.Material.Filled.Add"
+                        Tooltip="Add device"
+                        AriaLabel="Add device"
+                        OnClick="@OpenAddManualScannerDialogAsync"/>
             <IconButton Icon="@Icons.Material.Filled.Refresh"
                         Tooltip="Refresh devices"
                         AriaLabel="Refresh devices"
@@ -21,7 +25,8 @@
                               DiscoveryStatusLabel="@ViewModel.DiscoveryStatusLabel"
                               IsLoading="@ViewModel.IsLoadingDevices"
                               ErrorMessage="@ViewModel.ErrorMessage"
-                              SelectedDeviceIdChanged="@ViewModel.SelectDevice"/>
+                              SelectedDeviceIdChanged="@ViewModel.SelectDevice"
+                              DeleteDevice="@RemoveManualScannerAsync"/>
         
         <MudDivider 
             DividerType="DividerType.FullWidth"

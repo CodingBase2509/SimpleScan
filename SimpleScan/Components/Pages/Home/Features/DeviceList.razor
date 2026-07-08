@@ -3,37 +3,73 @@
     {
         <LoadingState Message="Searching for devices..."/>
     }
-    else if (!string.IsNullOrWhiteSpace(ErrorMessage))
-    {
-        <ErrorState Title="Device discovery failed"
-                    Message="@ErrorMessage"/>
-    }
     else if (Devices.Count == 0)
     {
-        <EmptyState Icon="@Icons.Material.Filled.DocumentScanner"
-                    Title="No devices found"/>
+        if (!string.IsNullOrWhiteSpace(ErrorMessage))
+        {
+            <ErrorState Title="Device discovery failed"
+                        Message="@ErrorMessage"/>
+        }
+        else
+        {
+            <EmptyState Icon="@Icons.Material.Filled.DocumentScanner"
+                        Title="No devices found"/>
+        }
     }
     else
     {
+        if (!string.IsNullOrWhiteSpace(ErrorMessage))
+        {
+            <InlineError Message="@ErrorMessage"/>
+        }
+
         @foreach (var device in Devices)
         {
-            <button class="@GetItemClass(device)"
-                    type="button"
-                    @onclick="() => SelectDeviceAsync(device.Id)">
-                <div class="device-list__icon">
-                    <MudIcon Icon="@GetDeviceIcon(device)" Size="Size.Large"/>
-                </div>
-
-                <div class="device-list__body">
-                    <MudText Typo="Typo.subtitle1">@device.Name</MudText>
-
-                    <div class="device-list__badges">
-                        <StatusBadge Label="Scan"
-                                     Icon="@Icons.Material.Filled.DocumentScanner"
-                                     Color="Color.Primary"/>
+            <div class="@GetItemClass(device)">
+                <button class="device-list__select"
+                        type="button"
+                        @onclick="() => SelectDeviceAsync(device.Id)">
+                    <div class="device-list__icon">
+                        <MudIcon Icon="@GetDeviceIcon(device)" Size="Size.Large"/>
                     </div>
-                </div>
-            </button>
+
+                    <div class="device-list__body">
+                        <MudText Typo="Typo.subtitle1">@device.Name</MudText>
+
+                        @if (!string.IsNullOrWhiteSpace(device.NetworkAddress))
+                        {
+                            <MudText Typo="Typo.body2"
+                                     Color="Color.Secondary"
+                                     Class="device-list__address">
+                                @device.NetworkAddress
+                            </MudText>
+                        }
+
+                        <div class="device-list__badges">
+                            <StatusBadge Label="Scan"
+                                         Icon="@Icons.Material.Filled.DocumentScanner"
+                                         Color="Color.Primary"/>
+
+                            @if (IsManualDevice(device))
+                            {
+                                <StatusBadge Label="Manual"
+                                             Icon="@Icons.Material.Filled.EditLocationAlt"
+                                             Color="Color.Default"/>
+                            }
+                        </div>
+                    </div>
+                </button>
+
+                @if (IsManualDevice(device))
+                {
+                    <IconButton Icon="@Icons.Material.Filled.Delete"
+                                Tooltip="Remove manual device"
+                                AriaLabel="Remove manual device"
+                                Color="Color.Error"
+                                Class="device-list__delete"
+                                OnClick="@(_ => DeleteDeviceAsync(device.Id))"/>
+                }
+            </div>
         }
     }
 </div>

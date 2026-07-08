@@ -1,0 +1,5 @@
+.add-manual-scanner-dialog {
+    display: grid;
+    gap: 1rem;
+    min-width: min(26rem, 80vw);
+}

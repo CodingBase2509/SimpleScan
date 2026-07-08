@@ -64,6 +64,17 @@ public sealed class ScannerService
     public Task<IReadOnlyList<ScannerDevice>> ListKnownAsync(CancellationToken cancellationToken) =>
         _scanners.ListAsync(cancellationToken);
 
+    public async Task RememberAsync(ScannerDevice scanner, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(scanner);
+
+        await _scanners.SaveAsync(scanner, cancellationToken);
+
+        await _events.PublishAsync(
+            NewEvent(EventTypes.Scanner.Discovered, scanner.Id, scanner),
+            cancellationToken);
+    }
+
     private AppEvent NewEvent(string type, string? scannerId = null, object? payload = null) =>
         new(type, _timeProvider.GetUtcNow().UtcDateTime, scannerId, payload: payload);
 }

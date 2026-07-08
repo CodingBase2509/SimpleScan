@@ -21,8 +21,14 @@ public partial class DeviceList
     [Parameter]
     public EventCallback<string> SelectedDeviceIdChanged { get; set; }
 
+    [Parameter]
+    public EventCallback<string> DeleteDevice { get; set; }
+
     private Task SelectDeviceAsync(string deviceId) =>
         SelectedDeviceIdChanged.InvokeAsync(deviceId);
+
+    private Task DeleteDeviceAsync(string deviceId) =>
+        DeleteDevice.InvokeAsync(deviceId);
 
     private string GetItemClass(ScannerDevice device) =>
         device.Id == SelectedDeviceId
@@ -33,4 +39,7 @@ public partial class DeviceList
         device.Protocol == ScannerProtocol.Unknown
             ? Icons.Material.Filled.Devices
             : Icons.Material.Filled.DocumentScanner;
+
+    private static bool IsManualDevice(ScannerDevice device) =>
+        string.Equals(device.Manufacturer, "Manual", StringComparison.Ordinal);
 }

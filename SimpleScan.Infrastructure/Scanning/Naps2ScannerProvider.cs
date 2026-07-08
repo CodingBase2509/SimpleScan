@@ -126,7 +126,25 @@ public sealed class Naps2ScannerProvider : IScannerProvider
         var devices = await TryGetDevicesAsync(deviceKey.Driver, cancellationToken);
 
         return devices.FirstOrDefault(device => string.Equals(device.ID, deviceKey.DeviceId, StringComparison.Ordinal))
+            ?? TryCreateManualDevice(deviceKey)
             ?? throw new DomainException($"Scanner '{scannerId}' is not available.");
+    }
+
+    private static ScanDevice? TryCreateManualDevice(Naps2DeviceKey deviceKey)
+    {
+        if (deviceKey.Driver != Driver.Escl ||
+            !Uri.TryCreate(deviceKey.DeviceId, UriKind.Absolute, out var uri) ||
+            (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
+        {
+            return null;
+        }
+
+        return new ScanDevice(
+            Driver.Escl,
+            deviceKey.DeviceId,
+            uri.Host,
+            string.Empty,
+            deviceKey.DeviceId);
     }
 
     private static async Task<IReadOnlyList<ScanDevice>> TryGetDevicesAsync(

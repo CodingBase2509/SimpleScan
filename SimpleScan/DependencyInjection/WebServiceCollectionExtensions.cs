@@ -10,6 +10,7 @@ public static class WebServiceCollectionExtensions
     {
         services.AddMudServices();
 
+        services.AddScoped<ManualScannerStorage>();
         services.AddScoped<ScanWorkspaceState>();
         services.AddScoped<HomePageViewModel>();
         services.AddScoped<ScanPageViewModel>();
