@@ -46,7 +46,9 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddSingleton<IEventPublisher>(provider => provider.GetRequiredService<InMemoryEventBus>());
         services.AddSingleton<IEventSubscriber>(provider => provider.GetRequiredService<InMemoryEventBus>());
 
-        services.AddSingleton<IScannerProvider, MockScannerProvider>();
+        services.AddSingleton<MockScannerProvider>();
+        services.AddSingleton<Naps2ScannerProvider>();
+        services.AddSingleton<IScannerProvider, CompositeScannerProvider>();
 
         return services;
     }
