@@ -29,7 +29,8 @@
         
         <ScanSettingsPanel Settings="@ViewModel.Settings"
                            Capabilities="@ViewModel.Capabilities"
-                           Disabled="@(ViewModel.IsLoading || ViewModel.IsScanning)"/>
+                           Disabled="@(ViewModel.IsLoading || ViewModel.IsScanning || ViewModel.IsUpdatingSettings)"
+                           SettingsChanged="@ViewModel.UpdateSettingsAsync"/>
         
         <ScanActionPanel CanScan="@ViewModel.CanScan"
                          CanEditPage="@ViewModel.CanEditPage"

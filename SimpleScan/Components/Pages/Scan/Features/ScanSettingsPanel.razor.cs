@@ -15,6 +15,9 @@ public partial class ScanSettingsPanel
     [Parameter]
     public bool Disabled { get; set; }
 
+    [Parameter]
+    public EventCallback<ScanSettings> SettingsChanged { get; set; }
+
     private int SelectedDpi => Settings?.Dpi ?? SupportedDpi.First();
 
     private ScanColorMode SelectedColorMode => Settings?.ColorMode ?? SupportedColorModes.First();
@@ -46,6 +49,48 @@ public partial class ScanSettingsPanel
         Capabilities?.SupportedSources.Count > 0
             ? Capabilities.SupportedSources
             : ["Flatbed"];
+
+    private Task OnDpiChangedAsync(int dpi) =>
+        NotifySettingsChangedAsync(dpi: dpi);
+
+    private Task OnColorModeChangedAsync(ScanColorMode colorMode) =>
+        NotifySettingsChangedAsync(colorMode: colorMode);
+
+    private Task OnPaperSizeChangedAsync(string paperSize) =>
+        NotifySettingsChangedAsync(paperSize: paperSize);
+
+    private Task OnSourceChangedAsync(string source) =>
+        NotifySettingsChangedAsync(source: source);
+
+    private Task OnDuplexChangedAsync(bool duplex) =>
+        NotifySettingsChangedAsync(duplex: duplex);
+
+    private Task NotifySettingsChangedAsync(
+        int? dpi = null,
+        ScanColorMode? colorMode = null,
+        string? paperSize = null,
+        string? source = null,
+        bool? duplex = null)
+    {
+        if (Settings is null || Disabled)
+        {
+            return Task.CompletedTask;
+        }
+
+        var settings = new ScanSettings(
+            dpi ?? SelectedDpi,
+            colorMode ?? SelectedColorMode,
+            paperSize ?? SelectedPaperSize,
+            source ?? SelectedSource,
+            duplex ?? SelectedDuplex);
+
+        if (settings.Equals(Settings))
+        {
+            return Task.CompletedTask;
+        }
+
+        return SettingsChanged.InvokeAsync(settings);
+    }
 
     private static string GetColorModeLabel(ScanColorMode colorMode) =>
         colorMode switch

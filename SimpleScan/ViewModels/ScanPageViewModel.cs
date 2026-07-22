@@ -30,6 +30,8 @@ public sealed class ScanPageViewModel(
 
     public bool IsUpdatingPages { get; private set; }
 
+    public bool IsUpdatingSettings { get; private set; }
+
     public bool IsCancelling { get; private set; }
 
     public bool IsExporting { get; private set; }
@@ -54,7 +56,7 @@ public sealed class ScanPageViewModel(
     public string ScannerName => Scanner?.Name ?? Document?.ScannerId ?? "Scanner";
 
     private bool HasBusyAction =>
-        IsLoading || IsScanning || IsUpdatingPages || IsCancelling || IsExporting;
+        IsLoading || IsScanning || IsUpdatingPages || IsUpdatingSettings || IsCancelling || IsExporting;
 
     public bool CanScan =>
         Document is not null &&
@@ -116,6 +118,35 @@ public sealed class ScanPageViewModel(
         navigationManager.NavigateTo($"/scan/{DocumentId}/{pageId}");
         NotifyStateChanged();
         return Task.CompletedTask;
+    }
+
+    public async Task UpdateSettingsAsync(ScanSettings settings)
+    {
+        if (Document is null || HasBusyAction)
+        {
+            return;
+        }
+
+        IsUpdatingSettings = true;
+        ErrorMessage = null;
+        NotifyStateChanged();
+
+        try
+        {
+            Document = await scanDocumentService.UpdateSettingsAsync(
+                DocumentId,
+                settings,
+                CancellationToken.None);
+        }
+        catch (Exception exception)
+        {
+            ErrorMessage = exception.Message;
+        }
+        finally
+        {
+            IsUpdatingSettings = false;
+            NotifyStateChanged();
+        }
     }
 
     public async Task ScanPageAsync()

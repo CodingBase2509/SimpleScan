@@ -41,6 +41,7 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddSingleton<IScanDocumentStore, InMemoryScanDocumentStore>();
         services.AddSingleton<IScannerStore, InMemoryScannerStore>();
         services.AddSingleton<IDownloadTicketStore, InMemoryDownloadStore>();
+        services.AddHostedService<FileStoreStartupCleanupService>();
 
         services.AddSingleton<InMemoryEventBus>();
         services.AddSingleton<IEventPublisher>(provider => provider.GetRequiredService<InMemoryEventBus>());
