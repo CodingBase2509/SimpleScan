@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using System.Globalization;
 using SimpleScan.Application.Processing.Pdf;
 using SimpleScan.Application.Scanners;
 using SimpleScan.Application.Scanning;
@@ -37,6 +38,10 @@ public sealed class ScanPageViewModel(
     public bool IsExporting { get; private set; }
 
     public string? ErrorMessage { get; private set; }
+
+    public string? ExportStatusMessage { get; private set; }
+
+    public bool HasExportStatus => !string.IsNullOrWhiteSpace(ExportStatusMessage);
 
     public ScanDocument? Document { get; private set; }
 
@@ -129,6 +134,7 @@ public sealed class ScanPageViewModel(
 
         IsUpdatingSettings = true;
         ErrorMessage = null;
+        ExportStatusMessage = null;
         NotifyStateChanged();
 
         try
@@ -158,6 +164,7 @@ public sealed class ScanPageViewModel(
 
         IsScanning = true;
         ErrorMessage = null;
+        ExportStatusMessage = null;
         NotifyStateChanged();
 
         try
@@ -209,6 +216,7 @@ public sealed class ScanPageViewModel(
 
         IsUpdatingPages = true;
         ErrorMessage = null;
+        ExportStatusMessage = null;
         NotifyStateChanged();
 
         try
@@ -237,6 +245,7 @@ public sealed class ScanPageViewModel(
 
         IsCancelling = true;
         ErrorMessage = null;
+        ExportStatusMessage = null;
         NotifyStateChanged();
 
         try
@@ -261,27 +270,32 @@ public sealed class ScanPageViewModel(
 
     public async Task SaveAsync()
     {
-        if (!CanSave)
+        var document = Document;
+        if (!CanSave || document is null)
         {
             return;
         }
 
         IsExporting = true;
         ErrorMessage = null;
+        ExportStatusMessage = "Creating PDF and preparing download.";
         NotifyStateChanged();
 
         try
         {
+            var fileName = CreateExportFileName(document);
             var ticket = await pdfExportService.ExportAsync(
                 DocumentId,
-                new PdfExportSettings(),
+                new PdfExportSettings(fileName),
                 CancellationToken.None);
 
             await RequestDownloadAsync($"/downloads/{ticket.Token}");
+            ExportStatusMessage = $"Download ready: {ticket.FileName}";
         }
         catch (Exception exception)
         {
             ErrorMessage = exception.Message;
+            ExportStatusMessage = null;
         }
         finally
         {
@@ -310,6 +324,7 @@ public sealed class ScanPageViewModel(
     {
         IsUpdatingPages = true;
         ErrorMessage = null;
+        ExportStatusMessage = null;
         NotifyStateChanged();
 
         try
@@ -366,6 +381,29 @@ public sealed class ScanPageViewModel(
         {
             await handler(url);
         }
+    }
+
+    private static string CreateExportFileName(ScanDocument document)
+    {
+        var baseName = string.IsNullOrWhiteSpace(document.Name)
+            ? "SimpleScan"
+            : document.Name;
+        var timestamp = document.CreatedAtUtc.ToString("yyyyMMdd-HHmmss", CultureInfo.InvariantCulture);
+        var safeBaseName = SanitizeFileName(baseName);
+
+        return $"{safeBaseName}-{timestamp}.pdf";
+    }
+
+    private static string SanitizeFileName(string value)
+    {
+        var invalidChars = Path.GetInvalidFileNameChars();
+        var characters = value
+            .Trim()
+            .Select(character => invalidChars.Contains(character) ? '-' : character)
+            .ToArray();
+        var fileName = new string(characters).Trim('-', ' ', '.');
+
+        return string.IsNullOrWhiteSpace(fileName) ? "SimpleScan" : fileName;
     }
 
     private void NotifyStateChanged() =>

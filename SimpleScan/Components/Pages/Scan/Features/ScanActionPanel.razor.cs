@@ -26,6 +26,12 @@ public partial class ScanActionPanel
     public bool IsSaving { get; set; }
 
     [Parameter]
+    public string? ExportStatusMessage { get; set; }
+
+    private bool HasExportStatus =>
+        !string.IsNullOrWhiteSpace(ExportStatusMessage);
+
+    [Parameter]
     public EventCallback ScanClicked { get; set; }
 
     [Parameter]

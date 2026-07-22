@@ -21,6 +21,10 @@
     letter-spacing: 0;
 }
 
+::deep .scan-action-panel__export-status {
+    margin: 0;
+}
+
 @media (max-width: 480px) {
     .scan-action-panel__secondary {
         grid-template-columns: 1fr;

@@ -38,4 +38,14 @@
             Save
         </AppButton>
     </div>
+
+    @if (HasExportStatus)
+    {
+        <MudAlert Severity="@(IsSaving ? Severity.Info : Severity.Success)"
+                  Variant="Variant.Outlined"
+                  Dense="true"
+                  Class="scan-action-panel__export-status">
+            @ExportStatusMessage
+        </MudAlert>
+    }
 </section>
