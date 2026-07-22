@@ -1,5 +1,6 @@
 using SimpleScan.Application.FileStorage;
 using SimpleScan.Application.Scanners;
+using SimpleScan.Domain.Common;
 using SimpleScan.Domain.Scanners;
 using SimpleScan.Domain.Scanning;
 
@@ -32,11 +33,16 @@ public sealed class CompositeScannerProvider(
 
     private IScannerProvider ResolveProvider(string scannerId)
     {
+        if (MockScannerProvider.CanHandle(scannerId))
+        {
+            return mockScannerProvider;
+        }
+
         if (Naps2ScannerProvider.CanHandle(scannerId))
         {
             return naps2ScannerProvider;
         }
 
-        return mockScannerProvider;
+        throw new DomainException($"Device '{scannerId}' does not have a scanner provider.");
     }
 }

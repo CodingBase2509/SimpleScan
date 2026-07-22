@@ -36,9 +36,13 @@ public partial class DeviceList
             : "device-list__item";
 
     private static string GetDeviceIcon(ScannerDevice device) =>
-        device.Protocol == ScannerProtocol.Unknown
-            ? Icons.Material.Filled.Devices
-            : Icons.Material.Filled.DocumentScanner;
+        device switch
+        {
+            { CanScan: true, CanPrint: true } => Icons.Material.Filled.DevicesOther,
+            { CanPrint: true } => Icons.Material.Filled.Print,
+            { Protocol: ScannerProtocol.Unknown } => Icons.Material.Filled.Devices,
+            _ => Icons.Material.Filled.DocumentScanner
+        };
 
     private static bool IsManualDevice(ScannerDevice device) =>
         string.Equals(device.Manufacturer, "Manual", StringComparison.Ordinal);

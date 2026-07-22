@@ -17,6 +17,9 @@ public sealed class MockScannerProvider : IScannerProvider
         model: "Mock",
         networkAddress: "mock://scanner");
 
+    public static bool CanHandle(string scannerId) =>
+        string.Equals(scannerId, ScannerId, StringComparison.Ordinal);
+
     public Task<IReadOnlyList<ScannerDevice>> DiscoverAsync(CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -60,7 +63,7 @@ public sealed class MockScannerProvider : IScannerProvider
 
     private static void EnsureKnownScanner(string scannerId)
     {
-        if (!string.Equals(scannerId, ScannerId, StringComparison.Ordinal))
+        if (!CanHandle(scannerId))
         {
             throw new InvalidOperationException($"Scanner '{scannerId}' is not known by the mock scanner provider.");
         }

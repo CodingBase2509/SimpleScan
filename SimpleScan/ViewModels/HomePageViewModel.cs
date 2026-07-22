@@ -32,7 +32,7 @@ public sealed class HomePageViewModel(
     public bool CanStartScan =>
         !IsLoadingDevices &&
         !IsStartingScan &&
-        SelectedDevice is not null;
+        SelectedDevice?.CanScan == true;
 
     private ScannerDevice? SelectedDevice =>
         Devices.FirstOrDefault(device => device.Id == SelectedDeviceId);
@@ -103,7 +103,7 @@ public sealed class HomePageViewModel(
     public async Task StartScanAsync()
     {
         var selectedDevice = SelectedDevice;
-        if (selectedDevice is null)
+        if (selectedDevice is null || !selectedDevice.CanScan)
         {
             return;
         }

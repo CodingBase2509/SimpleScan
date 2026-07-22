@@ -46,9 +46,19 @@
                         }
 
                         <div class="device-list__badges">
-                            <StatusBadge Label="Scan"
-                                         Icon="@Icons.Material.Filled.DocumentScanner"
-                                         Color="Color.Primary"/>
+                            @if (device.CanScan)
+                            {
+                                <StatusBadge Label="Scan"
+                                             Icon="@Icons.Material.Filled.DocumentScanner"
+                                             Color="Color.Primary"/>
+                            }
+
+                            @if (device.CanPrint)
+                            {
+                                <StatusBadge Label="Print"
+                                             Icon="@Icons.Material.Filled.Print"
+                                             Color="Color.Secondary"/>
+                            }
 
                             @if (IsManualDevice(device))
                             {
