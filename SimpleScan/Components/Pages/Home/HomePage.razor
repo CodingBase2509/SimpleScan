@@ -35,7 +35,10 @@
         />
         
         <HomeActionBar CanScan="@ViewModel.CanStartScan"
+                       CanPrint="@ViewModel.CanStartPrint"
                        IsStartingScan="@ViewModel.IsStartingScan"
-                       StartScanClicked="@ViewModel.StartScanAsync"/>
+                       IsStartingPrint="@ViewModel.IsStartingPrint"
+                       StartScanClicked="@ViewModel.StartScanAsync"
+                       StartPrintClicked="@ViewModel.StartPrintAsync"/>
     </section>
 </main>

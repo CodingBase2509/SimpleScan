@@ -19,6 +19,10 @@ public static class ScanFileEndpoints
             "/documents/{documentId:guid}/pages/{pageId:guid}/thumbnail",
             GetThumbnailAsync);
 
+        group.MapGet(
+            "/documents/{documentId:guid}/pages/{pageId:guid}/original",
+            GetOriginalAsync);
+
         return endpoints;
     }
 
@@ -48,6 +52,20 @@ public static class ScanFileEndpoints
             documents,
             files,
             page => page.ThumbnailPath,
+            cancellationToken);
+
+    private static Task<IResult> GetOriginalAsync(
+        Guid documentId,
+        Guid pageId,
+        ScanDocumentService documents,
+        IScanFileStorage files,
+        CancellationToken cancellationToken) =>
+        GetPageFileAsync(
+            documentId,
+            pageId,
+            documents,
+            files,
+            page => page.OriginalPath,
             cancellationToken);
 
     private static async Task<IResult> GetPageFileAsync(
@@ -88,6 +106,23 @@ public static class ScanFileEndpoints
             ".png" => "image/png",
             ".svg" => "image/svg+xml",
             ".tif" or ".tiff" => "image/tiff",
+            ".bmp" => "image/bmp",
+            ".gif" => "image/gif",
+            ".webp" => "image/webp",
+            ".pdf" => "application/pdf",
+            ".doc" => "application/msword",
+            ".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            ".rtf" => "application/rtf",
+            ".txt" => "text/plain",
+            ".html" or ".htm" => "text/html",
+            ".odt" => "application/vnd.oasis.opendocument.text",
+            ".xls" => "application/vnd.ms-excel",
+            ".xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            ".csv" => "text/csv",
+            ".ods" => "application/vnd.oasis.opendocument.spreadsheet",
+            ".ppt" => "application/vnd.ms-powerpoint",
+            ".pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+            ".odp" => "application/vnd.oasis.opendocument.presentation",
             _ => "application/octet-stream"
         };
     }

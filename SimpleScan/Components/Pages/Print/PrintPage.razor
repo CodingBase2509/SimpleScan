@@ -1,0 +1,93 @@
+@using Microsoft.AspNetCore.Components.Forms
+@using SimpleScan.Components.Pages.Print.Features
+@using SimpleScan.Components.Pages.Scan.Features
+@page "/print/{DocumentId:guid}"
+@page "/print/{DocumentId:guid}/{PageId:guid}"
+
+<main class="print-page">
+    <section class="print-page__preview">
+        @if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
+        {
+            <ErrorState Title="Print document could not be loaded"
+                        Message="@ViewModel.ErrorMessage"/>
+        }
+
+        <PagePreview HasPage="@(ViewModel.SelectedPage is not null)"
+                     PreviewUrl="@ViewModel.PreviewUrl"
+                     PreviewKind="@ViewModel.SelectedPagePreviewKind"
+                     FileName="@ViewModel.SelectedPageFileName"/>
+
+        <ScannedPagesStrip DocumentId="@ViewModel.DocumentId"
+                           Pages="@ViewModel.Pages"
+                           SelectedPageId="@ViewModel.SelectedPageId"
+                           Disabled="@(ViewModel.IsUpdatingPages || ViewModel.IsUploading)"
+                           AriaLabel="Uploaded pages"
+                           EmptyMessage="No files uploaded yet"
+                           PageSelected="@ViewModel.SelectPageAsync"
+                           MovePageEarlier="@ViewModel.MovePageEarlierAsync"
+                           MovePageLater="@ViewModel.MovePageLaterAsync"
+                           DeletePage="@ViewModel.DeletePageAsync"/>
+    </section>
+
+    <aside class="print-page__sidebar">
+        <section class="print-page__printer">
+            <MudSelect T="string"
+                       Label="Printer"
+                       Value="@ViewModel.PrinterName"
+                       Variant="Variant.Outlined"
+                       Dense="true"
+                       Disabled="@ViewModel.IsLoading">
+                <MudSelectItem T="string" Value="@ViewModel.PrinterName">@ViewModel.PrinterName</MudSelectItem>
+            </MudSelect>
+        </section>
+
+        <section class="print-page__upload">
+            <MudText Typo="Typo.h6">Pages</MudText>
+            <label class="@GetUploadTriggerClass()">
+                <MudIcon Icon="@Icons.Material.Filled.UploadFile"
+                         Size="Size.Medium"/>
+                <span>Upload pages</span>
+                <InputFile OnChange="@OnFilesSelectedAsync"
+                           multiple
+                           disabled="@(!ViewModel.CanUpload)"
+                       accept=".jpg,.jpeg,.png,.svg,.tif,.tiff,.bmp,.gif,.webp,.pdf,.doc,.docx,.rtf,.odt,.txt,.html,.htm,.xls,.xlsx,.csv,.ods,.ppt,.pptx,.odp,image/*,application/pdf"
+                           class="print-page__file-input"/>
+            </label>
+
+            @if (!string.IsNullOrWhiteSpace(ViewModel.StatusMessage))
+            {
+                <MudAlert Severity="Severity.Info"
+                          Variant="Variant.Outlined"
+                          Dense="true">
+                    @ViewModel.StatusMessage
+                </MudAlert>
+            }
+        </section>
+
+        <PrintSettingsPanel Settings="@ViewModel.Settings"
+                            Capabilities="@ViewModel.Capabilities"
+                            Disabled="@(ViewModel.IsLoading || ViewModel.IsPrinting)"
+                            SettingsChanged="@ViewModel.UpdateSettingsAsync"/>
+
+        <section class="print-page__actions">
+            <div class="print-page__secondary-actions">
+                <AppButton Color="Color.Default"
+                           Variant="Variant.Outlined"
+                           Disabled="@(!ViewModel.CanCancel)"
+                           Loading="@ViewModel.IsCancelling"
+                           OnClick="@(_ => ViewModel.CancelAsync())"
+                           FullWidth="true">
+                    Cancel
+                </AppButton>
+
+                <AppButton StartIcon="@Icons.Material.Filled.Print"
+                           Disabled="@(!ViewModel.CanPrint)"
+                           Loading="@ViewModel.IsPrinting"
+                           OnClick="@(_ => ViewModel.PrintAsync())"
+                           FullWidth="true">
+                    Print
+                </AppButton>
+            </div>
+        </section>
+    </aside>
+</main>

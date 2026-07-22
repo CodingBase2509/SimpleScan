@@ -19,7 +19,9 @@
                    Variant="Variant.Outlined"
                    Size="Size.Large"
                    Class="home-action-bar__button"
-                   Disabled="true"
+                   Disabled="@(!CanPrint)"
+                   Loading="@IsStartingPrint"
+                   OnClick="@StartPrintClicked"
                    FullWidth="true">
             Print
         </AppButton>

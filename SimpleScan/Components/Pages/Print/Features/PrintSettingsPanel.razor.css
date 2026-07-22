@@ -1,0 +1,11 @@
+.print-settings-panel {
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+    min-width: 0;
+}
+
+.print-settings-panel__fields {
+    display: grid;
+    gap: 0.75rem;
+}

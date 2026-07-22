@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using SimpleScan.Application.Printing;
 using SimpleScan.Application.Scanners;
 using SimpleScan.Application.Scanning;
 using SimpleScan.Domain.Scanners;
@@ -9,11 +10,15 @@ namespace SimpleScan.ViewModels;
 public sealed class HomePageViewModel(
     ScannerService scannerService,
     ScanDocumentService scanDocumentService,
+    PrintDocumentService printDocumentService,
+    PrinterService printerService,
     NavigationManager navigationManager)
 {
     public event Action? StateChanged;
 
     private IReadOnlyList<ScannerDevice> _discoveredDevices = [];
+
+    private IReadOnlyList<ScannerDevice> _discoveredPrintDevices = [];
 
     private IReadOnlyList<ScannerDevice> _manualDevices = [];
 
@@ -29,10 +34,19 @@ public sealed class HomePageViewModel(
 
     public bool IsStartingScan { get; private set; }
 
+    public bool IsStartingPrint { get; private set; }
+
     public bool CanStartScan =>
         !IsLoadingDevices &&
         !IsStartingScan &&
+        !IsStartingPrint &&
         SelectedDevice?.CanScan == true;
+
+    public bool CanStartPrint =>
+        !IsLoadingDevices &&
+        !IsStartingScan &&
+        !IsStartingPrint &&
+        SelectedDevice?.CanPrint == true;
 
     private ScannerDevice? SelectedDevice =>
         Devices.FirstOrDefault(device => device.Id == SelectedDeviceId);
@@ -70,8 +84,11 @@ public sealed class HomePageViewModel(
 
         try
         {
-            var scanners = await scannerService.DiscoverAsync(CancellationToken.None);
-            _discoveredDevices = scanners;
+            var scannersTask = scannerService.DiscoverAsync(CancellationToken.None);
+            var printersTask = printerService.DiscoverAsync(CancellationToken.None);
+
+            _discoveredDevices = await scannersTask;
+            _discoveredPrintDevices = await printersTask;
             MergeDevices();
             SelectedDeviceId = PreserveSelectionOrSelectFirst(SelectedDeviceId, Devices);
             DiscoveryStatusLabel = Devices.Count == 0 ? "No devices" : $"{Devices.Count} found";
@@ -139,6 +156,38 @@ public sealed class HomePageViewModel(
         }
     }
 
+    public async Task StartPrintAsync()
+    {
+        var selectedDevice = SelectedDevice;
+        if (selectedDevice is null || !selectedDevice.CanPrint)
+        {
+            return;
+        }
+
+        IsStartingPrint = true;
+        ErrorMessage = null;
+        NotifyStateChanged();
+
+        try
+        {
+            var document = await printDocumentService.CreateAsync(
+                selectedDevice.Id,
+                name: "Print job",
+                CancellationToken.None);
+
+            navigationManager.NavigateTo($"/print/{document.Id}");
+        }
+        catch (Exception exception)
+        {
+            ErrorMessage = exception.Message;
+        }
+        finally
+        {
+            IsStartingPrint = false;
+            NotifyStateChanged();
+        }
+    }
+
     private static string? PreserveSelectionOrSelectFirst(
         string? selectedDeviceId,
         IReadOnlyList<ScannerDevice> devices)
@@ -176,12 +225,31 @@ public sealed class HomePageViewModel(
     private void MergeDevices()
     {
         Devices = _discoveredDevices
+            .Concat(_discoveredPrintDevices)
             .Concat(_manualDevices)
             .GroupBy(device => device.Id, StringComparer.Ordinal)
-            .Select(group => group.First())
+            .Select(MergeDeviceGroup)
             .OrderBy(device => device.Protocol == ScannerProtocol.Mock)
             .ThenBy(device => device.Name, StringComparer.OrdinalIgnoreCase)
             .ToArray();
+    }
+
+    private static ScannerDevice MergeDeviceGroup(IGrouping<string, ScannerDevice> group)
+    {
+        var first = group.First();
+        var functions = group
+            .SelectMany(device => device.Functions)
+            .Distinct()
+            .ToArray();
+
+        return new ScannerDevice(
+            first.Id,
+            first.Name,
+            first.Protocol,
+            first.Manufacturer,
+            first.Model,
+            first.NetworkAddress,
+            functions);
     }
 
     private void NotifyStateChanged() =>

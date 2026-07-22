@@ -5,6 +5,7 @@ using SimpleScan.Application.Events;
 using SimpleScan.Application.FileStorage;
 using SimpleScan.Application.Processing.Images;
 using SimpleScan.Application.Processing.Pdf;
+using SimpleScan.Application.Printing;
 using SimpleScan.Application.Scanners;
 using SimpleScan.Application.Scanning;
 using SimpleScan.Application.Stores;
@@ -13,6 +14,7 @@ using SimpleScan.Infrastructure.FileStorage;
 using SimpleScan.Infrastructure.Options;
 using SimpleScan.Infrastructure.Processing.Images;
 using SimpleScan.Infrastructure.Processing.Pdf;
+using SimpleScan.Infrastructure.Printing;
 using SimpleScan.Infrastructure.Scanning;
 using SimpleScan.Infrastructure.Stores;
 
@@ -34,6 +36,9 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddScoped<ScannerService>();
         services.AddScoped<DownloadTicketService>();
         services.AddScoped<PdfExportService>();
+        services.AddScoped<PrintDocumentService>();
+        services.AddScoped<PrinterService>();
+        services.AddScoped<PrintJobService>();
 
         services.AddSingleton<IScanFileStorage, FileStore>();
         services.AddSingleton<IImageProcessor, ImageSharpImageProcessor>();
@@ -50,6 +55,9 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddSingleton<MockScannerProvider>();
         services.AddSingleton<Naps2ScannerProvider>();
         services.AddSingleton<IScannerProvider, CompositeScannerProvider>();
+        services.AddSingleton<MockPrinterProvider>();
+        services.AddSingleton<CupsPrinterProvider>();
+        services.AddSingleton<IPrinterProvider, CompositePrinterProvider>();
 
         return services;
     }

@@ -15,7 +15,8 @@ public sealed class MockScannerProvider : IScannerProvider
         ScannerProtocol.Mock,
         manufacturer: "SimpleScan",
         model: "Mock",
-        networkAddress: "mock://scanner");
+        networkAddress: "mock://scanner",
+        functions: [DeviceFunction.Scan, DeviceFunction.Print]);
 
     public static bool CanHandle(string scannerId) =>
         string.Equals(scannerId, ScannerId, StringComparison.Ordinal);

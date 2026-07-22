@@ -14,6 +14,7 @@ public static class WebServiceCollectionExtensions
         services.AddScoped<ScanWorkspaceState>();
         services.AddScoped<HomePageViewModel>();
         services.AddScoped<ScanPageViewModel>();
+        services.AddScoped<PrintPageViewModel>();
 
         return services;
     }

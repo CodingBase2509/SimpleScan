@@ -1,0 +1,59 @@
+@using SimpleScan.Domain.Printing
+
+<section class="print-settings-panel">
+    <MudText Typo="Typo.h6">Print settings</MudText>
+
+    <div class="print-settings-panel__fields">
+        <MudSelect T="int"
+                   Label="Copies"
+                   Value="@SelectedCopies"
+                   ValueChanged="@OnCopiesChangedAsync"
+                   Variant="Variant.Outlined"
+                   Dense="true"
+                   Disabled="@Disabled">
+            @foreach (var copyCount in SupportedCopyCounts)
+            {
+                <MudSelectItem T="int" Value="@copyCount">@copyCount</MudSelectItem>
+            }
+        </MudSelect>
+
+        <MudSelect T="string"
+                   Label="Paper size"
+                   Value="@SelectedPaperSize"
+                   ValueChanged="@OnPaperSizeChangedAsync"
+                   Variant="Variant.Outlined"
+                   Dense="true"
+                   Disabled="@Disabled">
+            @foreach (var paperSize in SupportedPaperSizes)
+            {
+                <MudSelectItem T="string" Value="@paperSize">@paperSize</MudSelectItem>
+            }
+        </MudSelect>
+
+        <MudSelect T="PrintColorMode"
+                   Label="Color"
+                   Value="@SelectedColorMode"
+                   ValueChanged="@OnColorModeChangedAsync"
+                   Variant="Variant.Outlined"
+                   Dense="true"
+                   Disabled="@Disabled">
+            @foreach (var colorMode in SupportedColorModes)
+            {
+                <MudSelectItem T="PrintColorMode" Value="@colorMode">@GetColorModeLabel(colorMode)</MudSelectItem>
+            }
+        </MudSelect>
+
+        <MudSelect T="PrintDuplexMode"
+                   Label="Sides"
+                   Value="@SelectedDuplexMode"
+                   ValueChanged="@OnDuplexModeChangedAsync"
+                   Variant="Variant.Outlined"
+                   Dense="true"
+                   Disabled="@Disabled">
+            @foreach (var duplexMode in SupportedDuplexModes)
+            {
+                <MudSelectItem T="PrintDuplexMode" Value="@duplexMode">@GetDuplexModeLabel(duplexMode)</MudSelectItem>
+            }
+        </MudSelect>
+    </div>
+</section>

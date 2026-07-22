@@ -1,7 +1,24 @@
 <div class="page-preview">
-    @if (HasPage && PreviewUrl is not null)
+    @if (HasPage && PreviewUrl is not null && PreviewKind == PagePreviewKind.Image)
     {
         <img class="page-preview__image" src="@PreviewUrl" alt="Selected scanned page" />
+    }
+    else if (HasPage && PreviewUrl is not null && PreviewKind == PagePreviewKind.Pdf)
+    {
+        <object class="page-preview__pdf"
+                data="@PreviewUrl"
+                type="application/pdf">
+            <a href="@PreviewUrl" target="_blank" rel="noopener">Open PDF</a>
+        </object>
+    }
+    else if (HasPage)
+    {
+        <div class="page-preview__file">
+            <MudIcon Icon="@Icons.Material.Filled.Description"
+                     Size="Size.Large"
+                     Color="Color.Secondary"/>
+            <MudText Typo="Typo.h6">@DisplayFileName</MudText>
+        </div>
     }
     else
     {

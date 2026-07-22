@@ -9,8 +9,17 @@ public partial class HomeActionBar
     public bool CanScan { get; set; }
 
     [Parameter]
+    public bool CanPrint { get; set; }
+
+    [Parameter]
     public bool IsStartingScan { get; set; }
 
     [Parameter]
+    public bool IsStartingPrint { get; set; }
+
+    [Parameter]
     public EventCallback<MouseEventArgs> StartScanClicked { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> StartPrintClicked { get; set; }
 }

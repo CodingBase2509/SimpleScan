@@ -19,8 +19,30 @@
     color: #242424;
 }
 
+.page-preview__file {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: min(100%, 32rem);
+    min-height: 20rem;
+    padding: 2rem;
+    border-radius: 8px;
+    background: #dedede;
+    color: #242424;
+    text-align: center;
+}
+
 .page-preview__image {
     display: block;
     height: min(100%, 80vh);
     object-fit: cover;
+}
+
+.page-preview__pdf {
+    width: min(100%, 64rem);
+    height: min(100%, 80vh);
+    min-height: 32rem;
+    border: 0;
+    background: #ffffff;
 }

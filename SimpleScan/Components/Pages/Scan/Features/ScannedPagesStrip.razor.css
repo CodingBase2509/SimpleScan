@@ -67,6 +67,15 @@
     object-fit: cover;
 }
 
+.scanned-pages-strip__thumbnail--file {
+    display: grid;
+    place-items: center;
+    gap: 0.125rem;
+    color: var(--mud-palette-text-secondary);
+    font-size: 0.5625rem;
+    font-weight: 700;
+}
+
 .scanned-pages-strip__meta {
     height: 0.875rem;
     line-height: 0.875rem;
@@ -96,4 +105,3 @@
     top: -0.75rem;
     right: -0.75rem;
 }
-
